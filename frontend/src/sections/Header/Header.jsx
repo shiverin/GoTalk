@@ -1,15 +1,16 @@
 import React from "react";
-import Button from "./Button";
-import SearchBar from "./SearchBar";
+import SearchBar from "../../components/SearchBar/SearchBar.jsx";
+import Button from "../../components/Button/Button.jsx";
 
-export default function Navbar() {
+export default function Header() {
   const handleSearch = (query) => {
     console.log("Search query:", query);
     // TODO: integrate search functionality
   };
 
   return (
-    <nav className="flex justify-between items-center p-6 bg-gray-100">
+    <nav className="w-full h-[10vh] flex justify-between items-center p-6 bg-gray-100 z-50">
+
       <div className="text-2xl font-bold">GoTalk</div>
 
       <div className="flex gap-4 items-center">
