@@ -8,11 +8,11 @@ import (
 	"github.com/go-chi/chi/v5"
 
 	"github.com/shiverin/gotalk/backend/internal/models"
-	"github.com/shiverin/gotalk/backend/internal/repo"
+	"github.com/shiverin/gotalk/backend/internal/repository"
 )
 
 type UserHandler struct {
-	Repo *repo.UserRepo
+	Repo *repository.UserRepo
 }
 
 // Register routes

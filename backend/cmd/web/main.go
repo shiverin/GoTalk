@@ -15,7 +15,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/shiverin/gotalk/backend/internal/api"
-	"github.com/shiverin/gotalk/backend/internal/repo"
+	"github.com/shiverin/gotalk/backend/internal/repository"
 )
 
 // A simple struct for our example response
@@ -37,11 +37,10 @@ func main() {
 	// create tables if not exist
 	createTables(db)
 
-	userRepo := repo.NewUserRepo(db)
+	userRepo := repository.NewUserRepo(db)
 	userHandler := &api.UserHandler{Repo: userRepo}
 
 	r := chi.NewRouter()
-	userHandler.Routes(r)
 
 	// --- Middleware Setup ---
 	// A good base middleware stack
@@ -59,6 +58,7 @@ func main() {
 		MaxAge:           300, // Maximum value not ignored by any major browsers
 	}))
 
+	userHandler.Routes(r)
 	// --- API Routes ---
 	r.Route("/api", func(r chi.Router) {
 		r.Get("/posts", func(w http.ResponseWriter, r *http.Request) {
