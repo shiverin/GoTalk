@@ -1,0 +1,11 @@
+## 11-12-2025
+- Initialized folders following best practices for Go and React
+- Set up a simple Go Api for testing purposes
+- Messed around with a sqlite database for testing as well
+- Decided to use TailwindCSS
+- Seperated React/src into components, sections, pages
+- With reference to the actual live "Reddit" site, I visualized the end result and started planning arrangement and positioning of components.
+- Came up with a skeleton LandingPage
+
+## 12-12-2025
+- 

@@ -6,8 +6,8 @@ export default function SideBar() {
 
   const menuItems = [
     { label: "Home" },
-    { label: "Profile" },
-    { label: "Settings" },
+    { label: "Popular" },
+    { label: "Explore"},
     { label: "Logout" },
   ];
 
