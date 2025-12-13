@@ -14,3 +14,11 @@
 - Really loved the SearchBar dynamically changing placeholder positions
 - Enforced clean implementation of OnHover: Slightly darker, OnClick: More darker for buttons. 
 
+## 12-13-2025
+- Fixed some buggy behvaiour of the sidebar not interacting correctly with main content
+- Brainstormed on how the main bulk of content should look like and how to implementation
+- Most likely have a top section with carousel -> card component
+- Bottom would be main post with paginator to allow infinite scroll (if the server load allows of course)
+
+
+

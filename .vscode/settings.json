@@ -1,0 +1,9 @@
+{
+  // Ignore unknown at-rule errors for Tailwind/PostCSS features
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore",
+
+  // Optional: enable PostCSS language features (if you have an extension enabled)
+  "editor.quickSuggestions": { "strings": true }
+}

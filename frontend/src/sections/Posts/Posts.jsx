@@ -1,9 +1,10 @@
-// In a section component, e.g., PostsSection.jsx
+// PostsSection.jsx
 import React, { useState, useEffect } from "react";
+import Post from "../../components/Post/Post";
 
 export default function Posts() {
   const [posts, setPosts] = useState([]);
-  
+
   useEffect(() => {
     fetch("http://localhost:8080/api/posts")
       .then((res) => res.json())
@@ -12,14 +13,20 @@ export default function Posts() {
   }, []);
 
   return (
-    <section className="p-6 bg-gray-50 w-full max-w-[1200px] mx-auto">
-      <h2>For Gooning</h2>
-      <div className="flex flex-col flex-wrap gap-4">
+    <section className=" bg-white max-w-[1200px] h-full">
+      <div className="flex flex-col gap-4">
         {posts.map((post) => (
-          <div key={post.id} className="p-4 border rounded shadow">
-            <h3>{post.title}</h3>
-            <p>{new Date(post.createdAt).toLocaleString()}</p>
-          </div>
+          <Post
+            key={post.id}
+            title={post.title}
+            subreddit={post.subreddit.name}
+            subredditIcon={post.subreddit.icon}
+            author={post.author}
+            timeAgo={post.timeAgo} // or generate from createdAt if needed
+            score={post.score}
+            comments={post.commentsCount}
+            link={post.link}
+          />
         ))}
       </div>
     </section>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Posts from "../Posts/Posts.jsx";
+import Main from "../Main/Main.jsx";
 import SideBar from "../SideBar/SideBar.jsx";
 import CircleButton from "../../components/CircleButton/CircleButton.jsx";
 import { Bars3Icon } from "@heroicons/react/24/solid";
@@ -10,14 +10,14 @@ export default function Body() {
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   return (
-    <div className="h-[92vh] bg-gray-50">
+    <div className="pt-[8vh] h-[100vh]">
       {/* Parent container that limits content width */}
       <div className="relative flex text-center">
 
         {/* Sidebar */}
         <div
           className={`
-            relative w-[18.5%] h-[90.8vh] bg-white z-20
+            fixed w-[18.5%] h-[90.8vh] bg-white z-20
             transform transition-transform duration-300 flex
             border-r border-gray-300
             ${sidebarOpen ? "translate-x-0" : "-translate-x-[88%]"}
@@ -26,27 +26,26 @@ export default function Body() {
         >
           <SideBar />
           {/* Sidebar toggle button */}
-          <div className="mt-5 mr-[8px]">          
-<div className="border-2 rounded-full inline-block border-[#808080] bg" >
-  <CircleButton
-    icon={<Bars3Icon className="w-6 h-6" />}
-    onClick={toggleSidebar}
-    size={7}
-  />
-</div>
+          <div className="mt-5 mr-0">          
+            <div className="border-2 rounded-full border-[#808080] bg" >
+              <CircleButton
+                icon={<Bars3Icon className="w-6 h-6" />}
+                onClick={toggleSidebar}
+                size={7}
+              />
+            </div>
           </div>
-
         </div>
 
         {/* Main content */}
         <div
           className={`
-            transition-all duration-300 flex-1 p-6 
-            ${sidebarOpen ? "ml-64" : ""}
+            transition-all duration-300 
+            flex-1 max-w-[81.5%]
+            ${sidebarOpen ? "ml-[18.5%]" : "ml-[10.3%]"}
           `}
         >
-
-          <Posts />
+          <Main />
         </div>
       </div>
     </div>
