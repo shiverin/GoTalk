@@ -13,7 +13,7 @@ export default function SearchBar({ placeholder = "Find anything", onSearch }) {
   const isActive = isFocused || query.length > 0;
 
   return (
-<div className="w-full relative h-screen flex items-center">
+<div className="w-full relative flex items-center">
   <div className="w-full max-w-6xl mx-auto flex justify-start">
     <form
       onSubmit={handleSubmit}

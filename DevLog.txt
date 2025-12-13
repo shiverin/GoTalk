@@ -8,4 +8,9 @@
 - Came up with a skeleton LandingPage
 
 ## 12-12-2025
-- 
+- Mainly improved SearchBar and Header
+- with reference to "Reddit" and borrowed its aesthetics
+- Small difference with some logos mistake
+- Really loved the SearchBar dynamically changing placeholder positions
+- Enforced clean implementation of OnHover: Slightly darker, OnClick: More darker for buttons. 
+

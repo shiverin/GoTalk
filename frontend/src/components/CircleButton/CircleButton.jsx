@@ -37,7 +37,6 @@ export default function CircleButton({
         transition-all duration-100
         shadow-sm
         outline-none
-        bg-gray-100
         text-gray-700
       "
     >
