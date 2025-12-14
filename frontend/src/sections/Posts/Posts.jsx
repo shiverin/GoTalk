@@ -13,7 +13,7 @@ export default function Posts() {
   }, []);
 
   return (
-    <section className=" bg-white max-w-[1200px] h-full">
+    <section className=" bg-white max-w-[1200px] h-[2000px]">
       <div className="flex flex-col gap-4">
         {posts.map((post) => (
           <Post

@@ -1,33 +1,44 @@
-import React from "react";
-
-export default function Card({ image, title, description, buttonText, onButtonClick }) {
-  return (
-    <div className="relative flex-shrink-0 w-[278px] h-52 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-      {/* Background Image */}
-      {image && (
-        <img
-          src={image}
-          alt={title}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+import React from "react";  
+  
+export default function Card({ image, title, description, subforum, url }) {   
+  const cardContent = (  
+    <div className="relative flex-shrink-0 w-[278px] h-52 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 group">  
+      {/* Background Image */}  
+      {image && (  
+        <img  
+          src={image}  
+          alt={title}  
+          className="absolute inset-0 w-full h-full object-cover"  
+        />  
       )}
-
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end items-start p-4">
-        <div className="flex flex-col items-start">
-          {title && <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>}
-          {description && <p className="text-sm text-white">{description}</p>}
-        </div>
-
-        {buttonText && onButtonClick && (
-          <button
-            onClick={onButtonClick}
-            className="bg-blue-600 text-white text-sm font-medium px-3 py-2 rounded hover:bg-blue-700 transition-colors mt-2"
-          >
-            {buttonText}
-          </button>
-        )}
-      </div>
-    </div>
-  );
+  
+      {/* Overlay */}  
+      <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end pb-2 pl-3">  
+        {/* Top Section: Title & Description */}  
+        <div>  
+          {title && <h3 className="text-lg font-semibold text-white mb-1">{title}</h3>}  
+          {description && <p className="text-sm text-white line-clamp-1">{description}</p>}  
+        </div>  
+  
+        {/* Bottom Section: Subforum Info */}  
+        {subforum && (  
+          <div className="mt-2">  
+            {subforum}  
+          </div>  
+        )}  
+      </div>  
+    </div>  
+  );  
+  
+  // If a URL is provided, wrap the card in an anchor tag  
+  if (url) {  
+    return (  
+      <a href={url} target="_blank" rel="noopener noreferrer">  
+        {cardContent}  
+      </a>  
+    );  
+  }  
+  
+  // Otherwise, just return the card div  
+  return cardContent;  
 }

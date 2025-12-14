@@ -17,7 +17,7 @@ export default function SearchBar({ placeholder = "Find anything", onSearch }) {
   <div className="w-full max-w-6xl mx-auto flex justify-start">
     <form
       onSubmit={handleSubmit}
-      style={{ width: "49.4%" }}
+      style={{ width: "49.6%" }}
       className={`
         flex items-center
         rounded-full
@@ -27,7 +27,7 @@ export default function SearchBar({ placeholder = "Find anything", onSearch }) {
         hover:bg-gray-100
         overflow-hidden
         px-1
-        ml-[31.6%]  /* shifts form to ~3/5 horizontally */
+        ml-[32%]  /* shifts form to ~3/5 horizontally */
         max-[640px]:ml-4  /* on small screens, shift less to avoid overflow */
       `}
     >
@@ -45,11 +45,12 @@ export default function SearchBar({ placeholder = "Find anything", onSearch }) {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         className={`
+          text-sm
           flex-1
           py-2
           outline-none
           bg-transparent
-          placeholder-gray-400
+          placeholder-gray-500
           ${isActive ? "text-left placeholder:text-left" : "text-center placeholder:text-center"}
         `}
       />

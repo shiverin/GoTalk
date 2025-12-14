@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 
-export default function PillButton({ text, onClick, bgcolor = "#E5EBEE", txtcolor="black"}) {
+export default function PillButton({
+  height = 40,
+  children,
+  onClick,
+  bgcolor = "#E5EBEE",
+  txtcolor = "black",
+  textSize = 14,
+  px = 14, // default horizontal padding in px
+}) {
   const [hovered, setHovered] = useState(false);
   const [active, setActive] = useState(false);
 
@@ -11,33 +19,33 @@ export default function PillButton({ text, onClick, bgcolor = "#E5EBEE", txtcolo
   };
 
   return (
-<button
-  onClick={onClick}
-  onMouseEnter={() => setHovered(true)}
-  onMouseLeave={() => {
-    setHovered(false);
-    setActive(false);
-  }}
-  onMouseDown={() => setActive(true)}
-  onMouseUp={() => setActive(false)}
-  style={{
-    backgroundColor: bgcolor,
-    color: txtcolor,
-    filter: getFilter(),
-
-  }}
-  className={`
-    px-4 py-2
-    m-1
-    rounded-full
-    text-sm font-medium
-    shadow-sm
-    focus:outline-none
-    h-10
-  `}
->
-  {text}
-</button>
-
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => {
+        setHovered(false);
+        setActive(false);
+      }}
+      onMouseDown={() => setActive(true)}
+      onMouseUp={() => setActive(false)}
+      style={{
+        backgroundColor: bgcolor,
+        color: txtcolor,
+        filter: getFilter(),
+        height: `${height}px`,
+        fontSize: `${textSize}px`,
+        paddingLeft: `${px}px`,
+        paddingRight: `${px}px`,
+      }}
+      className="
+        rounded-full
+        font-medium
+        focus:outline-none
+        inline-flex
+        items-center
+      "
+    >
+      {children}
+    </button>
   );
 }

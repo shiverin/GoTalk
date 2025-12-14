@@ -79,7 +79,7 @@ export default function Carousel({ cards }) {
       {/* Scrollable container */}
       <div
         ref={containerRef}
-        className="flex overflow-x-auto space-x-4 scroll-smooth py-4 scrollbar-hide"
+        className="flex overflow-x-auto space-x-4 scroll-smooth pt-4 scrollbar-hide"
         style={{ scrollSnapType: "x mandatory" }}
       >
         {cards.map((card, idx) => (
