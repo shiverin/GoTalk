@@ -28,8 +28,8 @@ export default function Layout({ children }) {
           `}
         >
           <SideBar />
-          <div className="mt-[19px] ml-[0px]">
-            <div className="border-[1px] rounded-full border-[#808080]">
+          <div className=" absolute left-[255px] mt-[19px]">
+            <div className="border-[1.5px] rounded-full border-[#808080]">
               <CircleButton
                 Icon={<HiOutlineMenu className="w-[17px] h-[17px]" />}
                 onClick={toggleSidebar}

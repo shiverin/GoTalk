@@ -6,11 +6,11 @@ import { FiTable } from "react-icons/fi";
 
 export default function Content() {
     return (
-        <div className="flex mt-2 justify-between">
+        <div className="flex mt-0 justify-between">
             {/* Left column: 70% */}
-            <div className="w-[70%] rounded-md pr-6 ">
-                <div className="border-b pb-[2px]">
-                <div className="flex flex-start pb-2 pl-[3px] pt-[1px]">
+            <div className="mt-2 w-[70%] rounded-md pr-[20px] ">
+                <div className="">
+                <div className="border-b pb-2 flex flex-start pl-[3px] pt-[1px]">
                 <PillButton height={30} bgcolor="#FFFFFF" txtcolor="#5C6C74" textSize={12} px="10">
                 Best
                 <span className="inline-flex ml-1">

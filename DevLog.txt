@@ -10,7 +10,7 @@
 ## 12-12-2025
 - Mainly improved SearchBar and Header
 - with reference to "Reddit" and borrowed its aesthetics
-- Small difference with some logos mistake
+- Small difference with logos
 - Really loved the SearchBar dynamically changing placeholder positions
 - Enforced clean implementation of OnHover: Slightly darker, OnClick: More darker for buttons. 
 
@@ -19,6 +19,21 @@
 - Brainstormed on how the main bulk of content should look like and how to implementation
 - Most likely have a top section with carousel -> card component
 - Bottom would be main post with paginator to allow infinite scroll (if the server load allows of course)
+- Finished accordingly
 
+## 12-13-2025
+- Changed a crtiical design of the page: introduced Layout.jsx as a base template to extend (inspired from static html template frameworks)
+- So now every page will extend Layout.jsx and children will be remaining of the content
+- Formatted bottom part of the page, looks semi complete
+- Made a initial post component for rendering user posts and tested with Go api
 
+## 12-14-2025
+- Made great progress on the UI components.
+- Card.jsx is near perfect, spent the most time thinking of future implementations from backend and made crucial design changes to accodmate smooth backend integration, (number of props, types of prop, aim to be most versatile as possible).
+- Some brainstorming of passing in image (probably as as URL) and also reminded myself of the need for a routing setup to the post itself.
+- Popular Communities has been developed and almost built, still left making the indivudal components, maybe will reuse VerticslMenu or perhaps make a new component for it.
+- Spent lots of time backengieering the logic of the one on Reddit.
+- Figured it was overflowy-auto within the top part of it only, the bottom part does not overflow, the entire component measures exactly remaining of the page.
+- Implemented the logic accordingly, managed to achieve 1 to 1 behvaiour as actual site.
+- The top of posts filter buttons has been added
 

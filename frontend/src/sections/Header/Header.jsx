@@ -25,7 +25,7 @@ export default function Header() {
       <div className="flex-1 text-center flex justify-center">
         <SearchBar onSearch={handleSearch} />
       </div>
-      <div className="border flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <PillButton>
           <div className="flex gap-2">   
             <MdOutlineQrCodeScanner className="text-xl cursor-pointer"/>
