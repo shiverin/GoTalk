@@ -32,8 +32,23 @@
 - Card.jsx is near perfect, spent the most time thinking of future implementations from backend and made crucial design changes to accodmate smooth backend integration, (number of props, types of prop, aim to be most versatile as possible).
 - Some brainstorming of passing in image (probably as as URL) and also reminded myself of the need for a routing setup to the post itself.
 - Popular Communities has been developed and almost built, still left making the indivudal components, maybe will reuse VerticslMenu or perhaps make a new component for it.
-- Spent lots of time backengieering the logic of the one on Reddit.
+- Spent lots of time backengineering the logic of the one on Reddit.
 - Figured it was overflowy-auto within the top part of it only, the bottom part does not overflow, the entire component measures exactly remaining of the page.
 - Implemented the logic accordingly, managed to achieve 1 to 1 behvaiour as actual site.
 - The top of posts filter buttons has been added
+
+## 12-15-2025
+- Completed SideBar component, polished and perfected its CSS.
+- Popular Communities was heavily redeveloped and perfected for smooth UI experience, correct implementation of scrolling action and user interaction.
+- For SideBar, I abstracted out VerticalMenu and also Resources section to ensure clean code and easy maintainence in future.
+- Preparing for backend development soon
+- Would probably implement log in/log out logic, seperate page content for logged in and logged out users, especially for the header component.
+- After user logs in, he would have access to much more functionalities: viewe his own profile, make a new post, liking a post, etc.
+
+## 12-16-2025
+- Created a skeleton framework of the required packages to be implemented in Go.
+- Not so ambiitious approach to designing the required features.
+- Starting off with a simple authentication system: register, login, logout.
+- Also considering on how to implement posts logic: create post, edit post, delete post.
+- Gave a rough sketch of the required tables/models to be stored in database.
 
