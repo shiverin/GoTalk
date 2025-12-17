@@ -45,7 +45,7 @@ export default function Popular() {
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    fetch("/api/communities/top20")
+    fetch("http://localhost:8080/api/communities/top20")
       .then((res) => {
         if (!res.ok) throw new Error("Network response was not ok");
         return res.json();

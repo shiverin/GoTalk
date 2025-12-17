@@ -5,7 +5,7 @@ import CircleButton from "../components/CircleButton/CircleButton.jsx";
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import { HiOutlineMenu } from "react-icons/hi";
 
-export default function Layout({ children }) {
+export default function Layout({ children, onLoginClick }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
@@ -13,7 +13,7 @@ export default function Layout({ children }) {
   return (
     <div>
       {/* Header */}
-      <Header />
+      <Header onLoginClick={onLoginClick}/>
 
       {/* Body: Sidebar + main content */}
       <div className="pt-[8vh] h-[100vh] relative flex">
@@ -47,7 +47,7 @@ export default function Layout({ children }) {
             ${sidebarOpen ? "ml-[18.5%]" : "ml-[10.3%]"}
           `}
         >
-          {children} {/* <-- page-specific content goes here */}
+          {children}
         </div>
       </div>
     </div>

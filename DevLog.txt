@@ -22,7 +22,7 @@
 - Finished accordingly
 
 ## 12-13-2025
-- Changed a crtiical design of the page: introduced Layout.jsx as a base template to extend (inspired from static html template frameworks)
+- Changed a critical design of the page: introduced Layout.jsx as a base template to extend (inspired from static html template frameworks)
 - So now every page will extend Layout.jsx and children will be remaining of the content
 - Formatted bottom part of the page, looks semi complete
 - Made a initial post component for rendering user posts and tested with Go api
@@ -52,3 +52,15 @@
 - Also considering on how to implement posts logic: create post, edit post, delete post.
 - Gave a rough sketch of the required tables/models to be stored in database.
 
+## 12-17-2025
+- Made a LoginModal component for frontend authentication
+- Searched up on best practices to ensure clean code
+- Touched up the CSS
+- Integrated with backend auth logic
+
+## 12-18-2025
+- Did a major feature on authentication process
+- Impleented clean and intuitive UI
+- Integrated together with Go Backend Api/Register and Login
+- Added AuthProvider to provide context on user status
+- 

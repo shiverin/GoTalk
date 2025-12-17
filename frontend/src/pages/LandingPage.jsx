@@ -2,9 +2,9 @@ import React from "react";
 import Layout from "./Layout.jsx";
 import Main from "../sections/Main/Main.jsx";
 
-export default function LandingPage() {
+export default function LandingPage({onLoginClick}) {
   return (
-    <Layout>
+    <Layout onLoginClick={onLoginClick}>
       <Main/>
     </Layout>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 
-export default function CircleButton({ Icon, onClick, size = 10 }) {
+export default function CircleButton({ Icon, onClick, size = 10, buttonColor}) {
   const dimension = `${size * 0.25}rem`;
   const [hovered, setHovered] = useState(false);
   const [active, setActive] = useState(false);
@@ -26,13 +26,13 @@ export default function CircleButton({ Icon, onClick, size = 10 }) {
         width: dimension,
         height: dimension,
         filter: getFilter(),
+        backgroundColor: buttonColor || "white",
       }}
       className="
         flex items-center justify-center
         rounded-full
         transition-all duration-100
         outline-none
-        bg-white
       "
     >
       {Icon || <EllipsisHorizontalIcon className="w-5 h-5" />} 

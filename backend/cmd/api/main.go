@@ -40,11 +40,13 @@ func main() {
 	r.Route("/api", func(r chi.Router) {
 		r.Post("/auth/register", handlers.Register)
 		r.Post("/auth/login", handlers.Login)
+		r.Get("/api/communities/top20", handlers.GetTopCommunities(db))
 
 		r.Group(func(r chi.Router) {
 			r.Use(authMiddleware.RequireAuth)
 
 			r.Post("/posts", handlers.CreatePost(db))
+			r.Get("/posts", handlers.GetPosts(db))
 		})
 	})
 

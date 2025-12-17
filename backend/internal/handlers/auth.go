@@ -18,7 +18,7 @@ var jwtSecret = []byte("dev-secret-change-later")
 
 type RegisterRequest struct {
 	Username string `json:"username"`
-	Email    string `json:"email"`
+	// Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
@@ -44,16 +44,19 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err = database.DB.Exec(`
-		INSERT INTO users (username, email, password_hash)
-		VALUES (?, ?, ?)
-	`, req.Username, req.Email, string(hash))
+		INSERT INTO users (username, password)
+		VALUES (?, ?)
+	`, req.Username, string(hash))
 
 	if err != nil {
-		http.Error(w, "Username or email already exists", 400)
+		http.Error(w, "Username already exists", 400)
 		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "User registered successfully",
+	})
 }
 
 // ---------- LOGIN ----------
@@ -67,19 +70,19 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	var (
 		userID       int
-		passwordHash string
+		password string
 	)
 
 	err := database.DB.QueryRow(`
-		SELECT id, password_hash FROM users WHERE username = ?
-	`, req.Username).Scan(&userID, &passwordHash)
+		SELECT id, password FROM users WHERE username = ?
+	`, req.Username).Scan(&userID, &password)
 
 	if err == sql.ErrNoRows {
 		http.Error(w, "Invalid credentials", http.StatusUnauthorized)
 		return
 	}
 
-	if bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(req.Password)) != nil {
+	if bcrypt.CompareHashAndPassword([]byte(password), []byte(req.Password)) != nil {
 		http.Error(w, "Invalid credentials", http.StatusUnauthorized)
 		return
 	}
