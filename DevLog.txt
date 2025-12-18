@@ -14,20 +14,17 @@
 - Really loved the SearchBar dynamically changing placeholder positions
 - Enforced clean implementation of OnHover: Slightly darker, OnClick: More darker for buttons. 
 
-## 12-13-2025
+## 13-12-2025
 - Fixed some buggy behvaiour of the sidebar not interacting correctly with main content
 - Brainstormed on how the main bulk of content should look like and how to implementation
 - Most likely have a top section with carousel -> card component
 - Bottom would be main post with paginator to allow infinite scroll (if the server load allows of course)
-- Finished accordingly
-
-## 12-13-2025
 - Changed a critical design of the page: introduced Layout.jsx as a base template to extend (inspired from static html template frameworks)
 - So now every page will extend Layout.jsx and children will be remaining of the content
 - Formatted bottom part of the page, looks semi complete
 - Made a initial post component for rendering user posts and tested with Go api
 
-## 12-14-2025
+## 14-12-2025
 - Made great progress on the UI components.
 - Card.jsx is near perfect, spent the most time thinking of future implementations from backend and made crucial design changes to accodmate smooth backend integration, (number of props, types of prop, aim to be most versatile as possible).
 - Some brainstorming of passing in image (probably as as URL) and also reminded myself of the need for a routing setup to the post itself.
@@ -37,7 +34,7 @@
 - Implemented the logic accordingly, managed to achieve 1 to 1 behvaiour as actual site.
 - The top of posts filter buttons has been added
 
-## 12-15-2025
+## 15-12-2025
 - Completed SideBar component, polished and perfected its CSS.
 - Popular Communities was heavily redeveloped and perfected for smooth UI experience, correct implementation of scrolling action and user interaction.
 - For SideBar, I abstracted out VerticalMenu and also Resources section to ensure clean code and easy maintainence in future.
@@ -45,22 +42,29 @@
 - Would probably implement log in/log out logic, seperate page content for logged in and logged out users, especially for the header component.
 - After user logs in, he would have access to much more functionalities: viewe his own profile, make a new post, liking a post, etc.
 
-## 12-16-2025
+## 16-12-2025
 - Created a skeleton framework of the required packages to be implemented in Go.
 - Not so ambiitious approach to designing the required features.
 - Starting off with a simple authentication system: register, login, logout.
 - Also considering on how to implement posts logic: create post, edit post, delete post.
 - Gave a rough sketch of the required tables/models to be stored in database.
 
-## 12-17-2025
+## 17-12-2025
 - Made a LoginModal component for frontend authentication
 - Searched up on best practices to ensure clean code
 - Touched up the CSS
 - Integrated with backend auth logic
 
-## 12-18-2025
+## 18-12-2025
 - Did a major feature on authentication process
-- Impleented clean and intuitive UI
+- Implemented clean and intuitive UI for login and signup
 - Integrated together with Go Backend Api/Register and Login
 - Added AuthProvider to provide context on user status
+- Frontend input bar for username and password polished and removed buggy interactions, ensure clean smootb UI action.
+- Encountered buggy behvaiour of the entire app rerendering every time i switch mode in modal cus i placed mode in app level, oops!
+- Shifted the logic to modal level only and fixed the behvaiour
+- Worked on the difference in frontend for logged in users vs logged out users
+
+## 12-19-2025
 - 
+
