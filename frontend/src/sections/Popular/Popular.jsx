@@ -117,8 +117,8 @@ export default function Popular() {
                 {/* Third line */}
                 <div className="mt-1">
                     goTalk © 2025. All rights reserved by Shizhen Zhao.
-            </div>
-      </div>
-    </div>  
+                </div>
+          </div>
+    </div>
   );
 }

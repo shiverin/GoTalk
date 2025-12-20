@@ -10,7 +10,4 @@ type Comment struct {
 	PostID    int       `json:"postId"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
-
-	// Optional frontend fields
-	Author string `json:"author,omitempty"` // username
 }

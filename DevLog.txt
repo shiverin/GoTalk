@@ -65,6 +65,12 @@
 - Shifted the logic to modal level only and fixed the behvaiour
 - Worked on the difference in frontend for logged in users vs logged out users
 
-## 12-19-2025
-- 
+## 19-12-2025
+- Skeletal mockup of the Post page
+- Setup api routes for posts/{id}
+- Layed the foundations for future communities and posting logic, made sure the data is stored correctly and enough data is stored.
+
+## 20-12-2025
+- Worked on frontend for Post page, matching Reddit's UI.
+- Made of the layout extension trick
 

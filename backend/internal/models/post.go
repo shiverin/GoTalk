@@ -12,10 +12,7 @@ type Post struct {
 	CommunityID int       `json:"communityId"`
 	CreatedAt   time.Time `json:"createdAt"`
 	UpdatedAt   time.Time `json:"updatedAt"`
-
-	// Optional frontend fields
-	Author        string `json:"author,omitempty"`       // username
-	CommunityName string `json:"communityName,omitempty"` // community name
-	Score         int    `json:"score,omitempty"`
-	CommentsCount int    `json:"commentsCount,omitempty"`
+	Score       int       `json:"score,omitempty"`
+	// Author        string `json:"author,omitempty"`       // username
+	// CommunityName string `json:"communityName,omitempty"` // community name
 }

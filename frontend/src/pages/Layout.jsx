@@ -28,7 +28,7 @@ export default function Layout({ children, onLoginClick }) {
           `}
         >
           <SideBar />
-          <div className=" absolute left-[255px] mt-[19px]">
+          <div className=" absolute left-[17.3vw] mt-[19px]">
             <div className="border-[1.5px] rounded-full border-[#808080]">
               <CircleButton
                 Icon={<HiOutlineMenu className="w-[17px] h-[17px]" />}

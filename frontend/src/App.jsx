@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
-import PostDetailPage from "./pages/PostPage";
+import PostPage from "./pages/PostPage";
 import LoginModal from "./components/LoginModal/LoginModal.jsx";
 import { AuthProvider } from "./Context/AuthContext.jsx";
 import "./App.css";
@@ -22,7 +22,7 @@ function App() {
               path="/"
               element={<LandingPage onLoginClick={openLogin} />}
             />
-            <Route path="/post/:id" element={<PostDetailPage />} />
+            <Route path="/posts/:id" element={<PostPage />} />
           </Routes>
 
           {/* Login/Signup Modal */}

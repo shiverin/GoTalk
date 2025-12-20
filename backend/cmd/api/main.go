@@ -35,20 +35,29 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           300,
 	}))
-
+	
 	// 5. Routes
 	r.Route("/api", func(r chi.Router) {
+		// Auth routes
 		r.Post("/auth/register", handlers.Register)
 		r.Post("/auth/login", handlers.Login)
-		r.Get("/api/communities/top20", handlers.GetTopCommunities(db))
 
+		// Public communities
+		r.Get("/communities/top20", handlers.GetTopCommunities(db))
+
+		// Posts
+		r.Get("/posts", handlers.GetPosts(db))          // Get all posts
+		r.Get("/posts/{postID}", handlers.GetPost(db)) // Get single post
+
+		// Auth-protected routes
 		r.Group(func(r chi.Router) {
 			r.Use(authMiddleware.RequireAuth)
-
 			r.Post("/posts", handlers.CreatePost(db))
-			r.Get("/posts", handlers.GetPosts(db))
+			r.Put("/posts/{postID}", handlers.UpdatePost(db))
+			r.Delete("/posts/{postID}", handlers.DeletePost(db))
 		})
 	})
+
 
 	// 6. Start server
 	fmt.Println("Go API server starting on http://localhost:8080")

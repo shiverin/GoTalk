@@ -1,5 +1,6 @@
 // Post.jsx
 import React from "react";
+import { useParams, Link } from "react-router-dom";
 
 export default function Post({
   title,
@@ -26,9 +27,9 @@ export default function Post({
       </div>
 
       {/* Title */}
-      <a href={link} target="_blank" className="block font-semibold text-gray-900 text-lg mb-2 hover:underline">
+      <Link to={link} className="block font-semibold text-gray-900 text-lg mb-2 hover:underline">
         {title}
-      </a>
+      </Link>
 
       {/* Author / Score / Comments */}
       <div className="flex items-center text-sm text-gray-500">
