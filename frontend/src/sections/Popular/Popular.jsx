@@ -7,11 +7,8 @@ const randomMembers = () => {
   return Math.floor(Math.random() * 5_000_000) + 1_000;
 };
 
-const randomIconUrl = () => {
-  // simple placeholder icons (safe + lightweight)
-  const id = Math.floor(Math.random() * 50) + 1;
-  return `https://api.dicebear.com/7.x/shapes/svg?seed=${id}`;
-};
+const randomIconUrl = (seed) => `https://api.dicebear.com/7.x/shapes/svg?seed=${seed}`;
+
 
 const defaultCommunities = [
   "r/politics",
@@ -37,7 +34,7 @@ const defaultCommunities = [
 ].map((name) => ({
   name,
   members: randomMembers(),
-  iconUrl: randomIconUrl(),
+  iconUrl: randomIconUrl(name),
 }));
 
 export default function Popular() {

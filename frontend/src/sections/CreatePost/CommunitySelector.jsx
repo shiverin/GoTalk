@@ -1,30 +1,21 @@
 import React from "react";
 
-export default function CommunitySelector({
-  communities = [],
-  selected = "",
-  onSelect = () => {},
-}) {
+export default function CommunitySelector({ communities, selected, onSelect }) {
   return (
-    <div className="mb-4">
-      <label className="text-sm font-semibold">Select a community</label>
-
+    <div className="my-4">
       <select
-        className="w-full border rounded p-2 mt-1 bg-white"
-        value={selected}
-        onChange={(e) => {
-          const value = e.target.value;
-          console.log("Selected community:", value); // debug output
-          onSelect(value);
-        }}
+        value={selected || ""}
+        onChange={e => onSelect(Number(e.target.value))}
+        className="border p-2 rounded w-full"
       >
-        <option value="">Choose a community…</option>
-
-        {communities.map((c) => (
-          <option key={c.id} value={c.name}>
-            c/{c.name}
-          </option>
-        ))}
+        <option value="">Select a community</option>
+        {communities
+          .filter(c => c && c.id != null && c.name) // remove null/undefined entries
+          .map(c => (
+            <option key={c.id} value={c.id}>
+              {c.name || "Unnamed Community"} {/* fallback just in case */}
+            </option>
+          ))}
       </select>
     </div>
   );

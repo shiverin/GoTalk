@@ -5,8 +5,8 @@ import SearchBar from "../../components/SearchBar/SearchBar.jsx";
 import PillButton from "../../components/PillButton/PillButton.jsx";
 import CircleButton from "../../components/CircleButton/CircleButton.jsx";
 import { useAuth } from "../../Context/AuthContext.jsx";
-import Dropdown from "../../components/DropdownMenu/DropdownMenu.jsx";
-import { DropdownItem } from "../../components/DropdownMenu/DropdownItem.jsx";
+import ProfileDropdown from "../ProfileDropdown/ProfileDropdown.jsx";
+import NoProfileDropdown from "../ProfileDropdown/NoProfileDropdown.jsx";
 
 import {
   MdOutlineQrCodeScanner,
@@ -55,7 +55,7 @@ export default function Header({ onLoginClick, communityId }) {
         {user ? (
           <>
 
-            <span className="text-gray-700 font-medium pr-2">
+            <span className="text-gray-700 font-medium pr-4">
               Welcome, {user.username}
             </span>
 
@@ -63,7 +63,7 @@ export default function Header({ onLoginClick, communityId }) {
               Icon={<MdCampaign className="text-xl" />}
               size={10}
               buttonColor="white"
-              onClick={logout}
+              onClick={""}
             />
 
             <CircleButton
@@ -91,14 +91,7 @@ export default function Header({ onLoginClick, communityId }) {
               size={10}
               buttonColor="white"
             />
-
-
-            {/* Profile dropdown */}
-            <Dropdown align="right" trigger={<CircleButton size="10" />}>
-              <DropdownItem danger onClick={logout}>
-                Log out
-              </DropdownItem>
-            </Dropdown>
+            <ProfileDropdown user={user} logout={logout}/>
           </>
         ) : (
           <>
@@ -118,19 +111,7 @@ export default function Header({ onLoginClick, communityId }) {
             </PillButton>
 
             {/* (...) Menu dropdown */}
-            <Dropdown align="right" trigger={<CircleButton size="10" />}>
-              <DropdownItem onClick={onLoginClick}>
-                Log in / Sign up
-              </DropdownItem>
-
-              <DropdownItem onClick={() => console.log("Advertise")}>
-                Advertise with goTalk
-              </DropdownItem>
-
-              <DropdownItem onClick={() => console.log("Pro")}>
-                Try goTalk Pro
-              </DropdownItem>
-            </Dropdown>
+            <NoProfileDropdown onLoginClick={onLoginClick}/>
           </>
         )}
       </div>

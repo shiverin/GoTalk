@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function Dropdown({ trigger, children, align = "left" }) {
+export default function Dropdown({
+  trigger,
+  children,
+  align = "left", // 'left', 'right', 'screen-left', 'screen-right'
+  menuClassName = "", // optional extra classes
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -16,9 +21,19 @@ export default function Dropdown({ trigger, children, align = "left" }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Compute alignment classes
+  let alignmentClasses = "";
+  switch (align) {
+    case "right":
+      alignmentClasses = "right-0 left-auto";
+      break;
+    default:
+      alignmentClasses = "left-0";
+  }
+
   return (
     <div className="relative inline-block" ref={ref}>
-      {/* Trigger now receives (open) */}
+      {/* Trigger */}
       <div onClick={() => setOpen((o) => !o)} className="cursor-pointer">
         {typeof trigger === "function" ? trigger(open) : trigger}
       </div>
@@ -29,8 +44,9 @@ export default function Dropdown({ trigger, children, align = "left" }) {
           absolute mt-2 min-w-[180px] bg-white rounded-xl shadow-lg border py-2 z-50
           transform origin-top-right
           transition-all duration-200 ease-out
-          ${align === "right" ? "right-0" : "left-0"}
+          ${alignmentClasses}
           ${open ? "scale-100 opacity-100 translate-y-0" : "scale-95 opacity-0 -translate-y-1 pointer-events-none"}
+          ${menuClassName}
         `}
       >
         {children}

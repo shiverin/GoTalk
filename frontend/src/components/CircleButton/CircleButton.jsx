@@ -11,10 +11,13 @@ export default function CircleButton({ Icon, onClick, size = 10, buttonColor}) {
     if (hovered) return "brightness(90%)";
     return "brightness(100%)";
   };
+  const handleClick = () => {
+    onClick?.(); // only calls onClick if it's defined
+  };
 
   return (
     <button
-      onClick={onClick}
+      onClick={handleClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => {
         setHovered(false);

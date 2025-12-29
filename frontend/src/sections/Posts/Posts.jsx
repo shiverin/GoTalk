@@ -16,6 +16,8 @@ function getTimeAgo(timestamp) {
   if (diffHours < 24) return `${diffHours}h ago`;
   return `${diffDays}d ago`;
 }
+const randomIconUrl = (seed) => `https://api.dicebear.com/7.x/shapes/svg?seed=${seed}`;
+
 
 export default function Posts() {
   const [posts, setPosts] = useState([]);
@@ -35,17 +37,19 @@ export default function Posts() {
           const community = p.community;
           const comments = p.comments || [];
 
+
           return (
             <Post
               key={post.id}
               title={post.title}
               subreddit={community?.name || "Unknown"}
-              subredditIcon={community?.icon || ""}
+              subredditIcon={randomIconUrl(community?.id)}
               author={p.author || "Unknown"}
               timeAgo={getTimeAgo(post.createdAt)}
               score={post.score ?? 0}
               comments={comments.length}
-              link={post.link || "posts/"+post.id}
+              link={"posts/"+post.id}
+              clink={"communities/"+post.communityId}
             />
           );
         })}

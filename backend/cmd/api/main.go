@@ -1,9 +1,12 @@
 package main
 
 import (
+	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -35,18 +38,48 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           300,
 	}))
-	
+
 	// 5. Routes
 	r.Route("/api", func(r chi.Router) {
 		// Auth routes
 		r.Post("/auth/register", handlers.Register)
 		r.Post("/auth/login", handlers.Login)
 
-		// Public communities
-		r.Get("/communities/top20", handlers.GetTopCommunities(db))
+		// Communities
+		r.Get("/communities/top/{limit}", func(w http.ResponseWriter, r *http.Request) {
+			limitStr := chi.URLParam(r, "limit")
+			limit, err := strconv.Atoi(limitStr)
+			if err != nil || limit <= 0 {
+				limit = 20 // default
+			}
+			handlers.GetTopCommunities(db, limit)(w, r)
+		})
+		r.Get("/communities", handlers.GetAllCommunities(db)) // Get all communities
+		// ---- GET COMMUNITY BY ID ----
+		r.Get("/communities/{communityID}", func(w http.ResponseWriter, r *http.Request) {
+			idStr := chi.URLParam(r, "communityID")
+			id, err := strconv.Atoi(idStr)
+			if err != nil {
+				http.Error(w, "Invalid community ID", http.StatusBadRequest)
+				return
+			}
+
+			community, err := handlers.GetCommunityByID(db, id) // your function that returns (Community, error)
+			if err != nil {
+				if err == sql.ErrNoRows {
+					http.Error(w, "Community not found", http.StatusNotFound)
+					return
+				}
+				http.Error(w, "Failed to fetch community", http.StatusInternalServerError)
+				return
+			}
+
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(community)
+		})
 
 		// Posts
-		r.Get("/posts", handlers.GetPosts(db))          // Get all posts
+		r.Get("/posts", handlers.GetPosts(db))         // Get all posts
 		r.Get("/posts/{postID}", handlers.GetPost(db)) // Get single post
 
 		// Auth-protected routes
@@ -57,7 +90,6 @@ func main() {
 			r.Delete("/posts/{postID}", handlers.DeletePost(db))
 		})
 	})
-
 
 	// 6. Start server
 	fmt.Println("Go API server starting on http://localhost:8080")

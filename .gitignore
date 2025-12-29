@@ -75,3 +75,7 @@ frontend/dist
 .env.production.local
 
 .vscode
+
+# SQLite / database files
+*.db
+*.sqlite

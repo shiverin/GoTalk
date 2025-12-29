@@ -13,7 +13,6 @@ import (
 	"github.com/shiverin/gotalk/backend/internal/models"
 )
 
-// ---- CREATE POST ----
 func CreatePost(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userID := auth.GetUserID(r)
@@ -32,30 +31,39 @@ func CreatePost(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		log.Printf("CreatePost payload: %+v\n", req)
+		now := time.Now()
 
 		res, err := db.Exec(`
-			INSERT INTO posts (title, content, link, author_id, community_id)
-			VALUES (?, ?, ?, ?, ?)
-		`, req.Title, req.Content, req.Link, userID, req.CommunityID)
+			INSERT INTO posts 
+				(title, content, link, author_id, community_id, created_at, updated_at, score)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+		`, req.Title, req.Content, req.Link, userID, req.CommunityID, now, now, 0)
 		if err != nil {
 			log.Println("CreatePost db.Exec error:", err)
 			http.Error(w, "Failed to create post", http.StatusInternalServerError)
 			return
 		}
 
-		postID, err := res.LastInsertId()
-		if err != nil {
-			log.Println("CreatePost LastInsertId error:", err)
-			http.Error(w, "Failed to retrieve post ID", http.StatusInternalServerError)
-			return
+		postID, _ := res.LastInsertId()
+
+		post := models.Post{
+			ID:          int(postID),
+			Title:       req.Title,
+			Content:     req.Content,
+			Link:        req.Link,
+			AuthorID:    userID,
+			CommunityID: req.CommunityID,
+			CreatedAt:   now,
+			UpdatedAt:   now,
+			Score:       0,
 		}
 
-		log.Println("CreatePost successful, postID:", postID)
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(map[string]int64{"id": postID})
+		json.NewEncoder(w).Encode(post)
 	}
 }
+
 
 // ---- GET ALL POSTS ----
 func GetPosts(db *sql.DB) http.HandlerFunc {
@@ -115,6 +123,9 @@ func GetPosts(db *sql.DB) http.HandlerFunc {
 				p.Link = link.String
 			}
 
+			p.AuthorID = authorID
+			p.CommunityID = communityID
+			
 			// Parse timestamps
 			var err1, err2 error
 			p.CreatedAt, err1 = time.Parse(time.RFC3339, createdStr)
