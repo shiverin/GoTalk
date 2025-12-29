@@ -7,12 +7,15 @@ export default function PillButton({
   bgcolor = "#E5EBEE",
   txtcolor = "black",
   textSize = 14,
-  px = 14, // default horizontal padding in px
+  px = 14,
+  isOpen = false, // <-- NEW
+  className = "",
 }) {
   const [hovered, setHovered] = useState(false);
   const [active, setActive] = useState(false);
 
   const getFilter = () => {
+    if (isOpen) return "brightness(90%)"; // OPEN STATE LOOK
     if (active) return "brightness(80%)";
     if (hovered) return "brightness(90%)";
     return "brightness(100%)";
@@ -37,13 +40,7 @@ export default function PillButton({
         paddingLeft: `${px}px`,
         paddingRight: `${px}px`,
       }}
-      className="
-        rounded-full
-        font-medium
-        focus:outline-none
-        inline-flex
-        items-center
-      "
+      className={`rounded-full font-medium focus:outline-none inline-flex items-center ${className}`}
     >
       {children}
     </button>

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowUp, ArrowDown, MessageSquare, Share2 } from "lucide-react";
 import PostCard from "../../components/Card/PostCard.jsx";
 import PostCardContent from "../../components/Card/PostCardContent.jsx";
-import PillButton from "../../components/PillButton/PillButton.jsx";
-import Dropdown from "../../components/DropdownMenu/DropdownMenu.jsx";
-import { DropdownItem } from "../../components/DropdownMenu/DropdownItem.jsx";
-import CircleButton from "../../components/CircleButton/CircleButton.jsx";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"; // optional icon
 
+import PostHeader from "./PostHeader.jsx";
+import PostInteractionBar from "./PostInteractionBar.jsx";
+import PostSortDropdown from "./PostSortDropdown.jsx";
+import CommentList from "./CommentList.jsx";
 
 // Helper function to compute "time ago"
 function timeAgo(dateString) {
@@ -95,40 +93,19 @@ export default function PostSection() {
     );
 
   return (
-    <div className="flex justify-center w-[57vw] pl-16 pr-5">
+    <div className="flex justify-center w-[57vw] pl-12 pr-3">
       <div className="w-full flex gap-4">
         {/* Main post content */}
-        <div className="flex flex-col gap-4 w-full pt-8">
+        <div className="flex flex-col gap-4 w-full pt-3">
           <PostCard className="rounded-2xl">
             <PostCardContent className="p-0">
               {/* Post header */}
-              <div className="flex justify-between">
-                  <div className="flex items-center justify-start gap-2 text-sm text-gray-500 mb-2">
-                    <Link to="/" className="rounded-full bg-[#E5EBEE] p-2 text-black text-sm">
-                        ←
-                    </Link>
-                      <div>
-                        <div>
-                        <span className="font-medium">r/{community?.name}</span> • {timeAgo(post.createdAt)}
-                        </div>
-                        <div className="font-medium">{author}</div>
-                      </div>
-                  </div>
-                  {/* (...) Menu dropdown */}
-                  <Dropdown align="right" trigger={<CircleButton size="10" />}>
-                    <DropdownItem>
-                      test 1
-                    </DropdownItem>
-      
-                    <DropdownItem onClick={() => console.log("Advertise")}>
-                      Advertise with goTalk
-                    </DropdownItem>
-      
-                    <DropdownItem onClick={() => console.log("Pro")}>
-                      Try goTalk Pro
-                    </DropdownItem>
-                  </Dropdown>
-              </div>
+              <PostHeader
+                community={community}
+                author={author}
+                createdAt={post.createdAt}
+                timeAgo={timeAgo}
+              />
 
               {/* Post title */}
               <h1 className="text-2xl font-bold mb-2">{post.title}</h1>
@@ -137,30 +114,10 @@ export default function PostSection() {
               <p className="text-base leading-relaxed mb-4">{post.content}</p>
 
               {/* Interactions */}
-              <div className="flex gap-4 text-gray-600 text-xs h-10" >
-                {/* voting */}
-                <div className="flex gap-0 bg-[#E5EBEE] items-center rounded-full">
-                <PillButton>
-                    <ArrowUp />
-                </PillButton>
-                <span className="">{post.score ?? 0}</span>
-                <PillButton>
-                    <ArrowDown />
-                </PillButton>
-                </div>
-
-                <PillButton className="flex items-center gap-1">
-                    <div className="flex gap-2  text-xs">
-                  <MessageSquare size={18} /> {comments.length}
-                  </div>
-                </PillButton>
-                <PillButton>
-                  <div className="flex items-center gap-2 text-xx">
-                  <Share2 size={15} /> 
-                  <div>Share</div>
-                  </div>
-                </PillButton>
-              </div>
+              <PostInteractionBar
+                score={post.score ?? 0}
+                commentCount={comments.length}
+              />
             </PostCardContent>
           </PostCard>
 
@@ -215,30 +172,8 @@ export default function PostSection() {
               </form>
             </div>
           </div>
-
-
-
-
-
-          {/* Comments section */}
-          <div className="flex flex-col gap-4">
-            {comments.length > 0 ? (
-              comments.map((c) => (
-                <PostCard key={c.id} className=" rounded-xl">
-                  <PostCardContent className="p-0">
-                    <div className="flex gap-1 items-center mb-1">
-                      <div className="text-sm font-medium">{c.username}</div>
-                      <div>•</div>
-                      <div className="text-xs text-gray-400">{timeAgo(c.createdAt)}</div>
-                    </div>
-                    <p>{c.content}</p>
-                  </PostCardContent>
-                </PostCard>
-              ))
-            ) : (
-              <p className="text-gray-500 text-sm">No comments yet.</p>
-            )}
-          </div>
+          <PostSortDropdown />
+          <CommentList comments={comments} timeAgo={timeAgo} />
         </div>
       </div>
     </div>

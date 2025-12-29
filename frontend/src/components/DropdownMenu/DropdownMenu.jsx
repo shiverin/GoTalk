@@ -18,9 +18,9 @@ export default function Dropdown({ trigger, children, align = "left" }) {
 
   return (
     <div className="relative inline-block" ref={ref}>
-      {/* Trigger */}
+      {/* Trigger now receives (open) */}
       <div onClick={() => setOpen((o) => !o)} className="cursor-pointer">
-        {trigger}
+        {typeof trigger === "function" ? trigger(open) : trigger}
       </div>
 
       {/* Menu */}

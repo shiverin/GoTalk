@@ -14,10 +14,10 @@ export default function SearchBar({ placeholder = "Find anything", onSearch }) {
 
   return (
 <div className="w-full relative flex items-center">
-  <div className="w-full max-w-6xl mx-auto flex justify-start">
+  <div className="w-full max-w-6xl flex justify-end pr-0">
     <form
       onSubmit={handleSubmit}
-      style={{ width: "49.6%" }}
+      style={{ width: "60%" }}
       className={`
         flex items-center
         rounded-full

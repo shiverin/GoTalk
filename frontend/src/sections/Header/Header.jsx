@@ -1,19 +1,31 @@
 import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import SearchBar from "../../components/SearchBar/SearchBar.jsx";
 import PillButton from "../../components/PillButton/PillButton.jsx";
 import CircleButton from "../../components/CircleButton/CircleButton.jsx";
-import { MdOutlineQrCodeScanner } from "react-icons/md";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import Dropdown from "../../components/DropdownMenu/DropdownMenu.jsx";
 import { DropdownItem } from "../../components/DropdownMenu/DropdownItem.jsx";
 
-export default function Header({ onLoginClick }) {
+import {
+  MdOutlineQrCodeScanner,
+  MdCampaign,
+  MdChatBubbleOutline,
+  MdAdd,
+  MdNotificationsNone,
+  MdLogin
+} from "react-icons/md";
+
+export default function Header({ onLoginClick, communityId }) {
   const { user, logout } = useAuth();
 
   const handleSearch = (query) => {
     console.log("Search query:", query);
     // TODO: integrate search functionality
   };
+
+  const navigate = useNavigate();
 
   return (
     <nav
@@ -32,21 +44,54 @@ export default function Header({ onLoginClick }) {
       </div>
 
       {/* Center: Search */}
-      <div className="flex-1 flex justify-center">
+      <div className="w-[63vw] flex justify-center">
         <SearchBar onSearch={handleSearch} />
       </div>
 
       {/* Right: Actions */}
-      <div className="flex items-center gap-2">
+      <div   className={`flex-1 justify-end flex items-center pr-[4px] ${
+        user ? "gap-0" : "gap-2"
+        }`}>
         {user ? (
           <>
-            <span className="text-gray-700 font-medium">
+
+            <span className="text-gray-700 font-medium pr-2">
               Welcome, {user.username}
             </span>
 
-            <PillButton bgcolor="#D93901" txtcolor="white" onClick={logout}>
-              Log out
+            <CircleButton
+              Icon={<MdCampaign className="text-xl" />}
+              size={10}
+              buttonColor="white"
+              onClick={logout}
+            />
+
+            <CircleButton
+              Icon={<MdChatBubbleOutline className="text-xl" />}
+              size={10}
+              buttonColor="white"
+            />
+
+            <PillButton
+              px="8"
+              bgcolor="white"
+              txtcolor="black"
+              onClick={() =>
+                navigate(communityId ? `/c/${communityId}/create` : "/create")
+              }
+            >
+              <div className="flex items-center gap-2">
+                <MdAdd className="text-xl" />
+                <span>Create</span>
+              </div>
             </PillButton>
+
+            <CircleButton
+              Icon={<MdNotificationsNone className="text-xl " />}
+              size={10}
+              buttonColor="white"
+            />
+
 
             {/* Profile dropdown */}
             <Dropdown align="right" trigger={<CircleButton size="10" />}>

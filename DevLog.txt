@@ -74,3 +74,17 @@
 - Worked on frontend for Post page, matching Reddit's UI.
 - Made of the layout extension trick
 
+## 29-12-2025
+- Back after a break in Korea (winter sch)
+- Decomposed messy PostSection into different components
+- Sharpened the UI interactions on PostSection, maintaining darkened state while "best" menu is open.
+- Created create post interface, made a skeletal template
+- Brainstormed how to navigae from a community -> Create post and the communityselector is prefilled with the community option (similar to reddit behaviour)
+
+Things left to do:
+Community backend CRUD
+Comments CRUD
+User Profile Retrieve and (edit??)
+Post Editing
+Comments editing
+Smoothen UI/ reorganize messy components

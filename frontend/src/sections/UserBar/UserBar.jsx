@@ -3,17 +3,17 @@ import React from "react";
 import CardSlides from "../CardSlides/CardSlides.jsx";
 
 
-export default function RightBar() {
+export default function UserBar() {
     return (
     <div
-      className={`sticky top-[8vh] w-[25vw] rounded-md flex flex-col overflow-y-auto transition-all duration-300 h-[654px] pr-16`}
+      className={`sticky top-[8vh] w-[25vw] rounded-md flex flex-col overflow-y-auto transition-all duration-300 h-[654px] pr-16 pt-4`}
     >
-      <div className="pt-2 px-4 bg-gray-50 rounded-md pb-5 h-[400px]"
+      <div className="pt-2 px-4 bg-gray-50 rounded-md pb-5 h-[300px]"
       >
         <div className="px-2 h-[200px]">Pratatim</div>
 
         <hr></hr>
-        <div className="px-2 h-[200px]">tungtungtung</div>
+        <div className="px-2 h-[100px]">tungtungtung</div>
       </div>
             <div className="flex flex-col gap-1 text-gray-500 text-xs mt-8 pb-[13px]">
                 {/* First line */}
@@ -25,7 +25,12 @@ export default function RightBar() {
 
                 {/* Second line */}
                 <div className="mt-1">
-                    Accessibility goTalk © 2025. All rights reserved by Shizhen Zhao.
+                                    Accessibility 
+                </div>
+                
+                {/* Third line */}
+                <div className="mt-1">
+                    goTalk © 2025. All rights reserved by Shizhen Zhao.
                 </div>
       </div>
     </div>

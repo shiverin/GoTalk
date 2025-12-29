@@ -1,14 +1,14 @@
 import React from "react";
 import Layout from "./Layout.jsx";
 import PostSection from "../sections/PostSection/PostSection.jsx";
-import RightBar from "../sections/RightBar/RightBar.jsx";
+import PostBar from "../sections/PostBar/PostBar.jsx";
 
-export default function LandingPage({onLoginClick}) {
+export default function PostPage({onLoginClick}) {
   return (
     <Layout onLoginClick={onLoginClick}>
       <div className="flex ">
       <PostSection/>
-      <RightBar/>
+      <PostBar/>
       </div>
     </Layout>
   );

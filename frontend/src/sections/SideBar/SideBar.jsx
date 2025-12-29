@@ -1,4 +1,5 @@
 import React, { useState } from "react";  
+import { useNavigate, useLocation } from "react-router-dom";
 import VerticalMenu from "../../components/VerticalMenu/VerticalMenu.jsx";  
 import Resources from "../../sections/Resources/Resources.jsx";
   
@@ -7,13 +8,17 @@ import { Home, Compass, BarChart2 } from 'lucide-react';
   
 export default function SideBar() {  
   const [selected, setSelected] = useState("Home"); // Default to 'Home'  
-  
+  const navigate = useNavigate(); // React Router's navigation hook
+  const location = useLocation(); // <-- current URL
+  console.log(location);
+
   // Define your menu items with icons  
   const mainMenuItems = [  
-    { id: "home", label: "Home", icon: <Home size={20} /> },  
-    { id: "popular", label: "Popular", icon: <BarChart2 size={20} /> },  
-    { id: "explore", label: "Explore", icon: <Compass size={20} /> },  
+    { id: "home", label: "Home", icon: <Home size={20} />, href: "/" },  
+    { id: "popular", label: "Popular", icon: <BarChart2 size={20} />, href: "/communities" },  
+    { id: "explore", label: "Explore", icon: <Compass size={20} />, href: "/communities" },  
   ];  
+    
     
   // Define items for the resources section  
   const resourceItems = [  
@@ -21,6 +26,15 @@ export default function SideBar() {
     { label: "Help", href: "#" },  
   ];  
   
+  // Determine which item is active based on current URL
+  const currentSelected = mainMenuItems.find(item => item.href === location.pathname)?.id || "home";
+
+  const handleSelect = (item) => {
+    if (item.href) {
+      navigate(item.href);
+    }
+  };
+
   return (  
     // The main sidebar container  
     <nav className="box-border flex flex-col w-[100%] shrink-0 bg-white select-none pl-4 pr-6 overflow-y-auto">  
@@ -29,8 +43,8 @@ export default function SideBar() {
       <div className="pt-4 pb-1">  
         <VerticalMenu  
           items={mainMenuItems}  
-          selectedItem={selected}  
-          onSelect={(item) => setSelected(item.id)}  
+          selectedItem={currentSelected}
+          onSelect={handleSelect}
         />  
       </div>  
   
