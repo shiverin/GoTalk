@@ -10,7 +10,7 @@
 ## 12-12-2025
 - Mainly improved SearchBar and Header
 - with reference to "Reddit" and borrowed its aesthetics
-- Small difference with logos
+- Small difference with icons
 - Really loved the SearchBar dynamically changing placeholder positions
 - Enforced clean implementation of OnHover: Slightly darker, OnClick: More darker for buttons. 
 
@@ -82,6 +82,15 @@
 - Brainstormed how to navigae from a community -> Create post and the communityselector is prefilled with the community option (similar to reddit behaviour)
 - Made an initial attempt at create post, seems to work
 - Communities page under development
+
+## 31-12-2025
+- Worked on Create Post Page UI
+- Added joining communities
+- Added members table to handle many to many relationships
+- Polished community page UI
+- Changed main page ui a little bit but still gonna tweak more 
+
+
 
 Things left to do:
 Community backend CRUD

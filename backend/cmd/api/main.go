@@ -82,9 +82,18 @@ func main() {
 		r.Get("/posts", handlers.GetPosts(db))         // Get all posts
 		r.Get("/posts/{postID}", handlers.GetPost(db)) // Get single post
 
+		r.Get("/communities/{communityID}/posts", handlers.GetPostsByCommunity(db))
+
 		// Auth-protected routes
 		r.Group(func(r chi.Router) {
 			r.Use(authMiddleware.RequireAuth)
+
+			// ---- Membership APIs ----
+			r.Post("/communities/{id}/join", handlers.JoinCommunity(db))
+			r.Post("/communities/{id}/leave", handlers.LeaveCommunity(db))
+			r.Get("/communities/{id}/joined", handlers.CheckMembership(db))
+
+			// Posts
 			r.Post("/posts", handlers.CreatePost(db))
 			r.Put("/posts/{postID}", handlers.UpdatePost(db))
 			r.Delete("/posts/{postID}", handlers.DeletePost(db))

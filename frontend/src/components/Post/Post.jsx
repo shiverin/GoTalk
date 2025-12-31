@@ -14,7 +14,7 @@ export default function Post({
   clink,
 }) {
   return (
-    <article className="w-full my-2 p-4 bg-neutral-50 rounded-md shadow hover:bg-neutral-100 cursor-pointer">
+    <article className="w-full my-1 p-1 rounded-md hover:bg-neutral-100 cursor-pointer">
       {/* Subreddit info */}
       <div className="flex items-center mb-2">
         <img

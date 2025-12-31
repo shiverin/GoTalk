@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Post from "../../components/Post/Post";
 
 // Helper to convert timestamp to "time ago"
@@ -16,29 +16,21 @@ function getTimeAgo(timestamp) {
   if (diffHours < 24) return `${diffHours}h ago`;
   return `${diffDays}d ago`;
 }
+
+// Helper to get a random icon based on community id
 const randomIconUrl = (seed) => `https://api.dicebear.com/7.x/shapes/svg?seed=${seed}`;
 
-
-export default function Posts() {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:8080/api/posts")
-      .then((res) => res.json())
-      .then((data) => setPosts(data))
-      .catch((err) => console.error(err));
-  }, []);
-
+export default function Posts({ posts = [] }) {
   return (
-    <section className="bg-white max-w-[1200px] min-h-[2000px] p-4">
-      <div className="flex flex-col gap-4">
+    <section className="bg-white max-w-[1200px] min-h-[2000px] p-0">
+      <div className="flex flex-col gap-0">
         {posts.map((p) => {
           const post = p.post;
           const community = p.community;
           const comments = p.comments || [];
 
-
           return (
+            <div className="border-y px-4" >
             <Post
               key={post.id}
               title={post.title}
@@ -48,9 +40,10 @@ export default function Posts() {
               timeAgo={getTimeAgo(post.createdAt)}
               score={post.score ?? 0}
               comments={comments.length}
-              link={"posts/"+post.id}
-              clink={"communities/"+post.communityId}
+              link={`/posts/${post.id}`}
+              clink={`/communities/${post.communityId}`}
             />
+            </div>
           );
         })}
       </div>
