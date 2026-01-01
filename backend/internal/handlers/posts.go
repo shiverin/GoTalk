@@ -64,7 +64,6 @@ func CreatePost(db *sql.DB) http.HandlerFunc {
 	}
 }
 
-
 // ---- GET ALL POSTS ----
 func GetPosts(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -125,7 +124,7 @@ func GetPosts(db *sql.DB) http.HandlerFunc {
 
 			p.AuthorID = authorID
 			p.CommunityID = communityID
-			
+
 			// Parse timestamps
 			var err1, err2 error
 			p.CreatedAt, err1 = time.Parse(time.RFC3339, createdStr)
@@ -204,7 +203,6 @@ func GetPosts(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(posts)
 	}
 }
-
 
 // ---- GET SINGLE POST ----
 func GetPost(db *sql.DB) http.HandlerFunc {
@@ -313,9 +311,9 @@ func GetPost(db *sql.DB) http.HandlerFunc {
 		}
 
 		response := struct {
-			Post      models.Post      `json:"post"`
-			Author    string           `json:"author"`
-			Community models.Community `json:"community"`
+			Post      models.Post           `json:"post"`
+			Author    string                `json:"author"`
+			Community models.Community      `json:"community"`
 			Comments  []CommentWithUsername `json:"comments"`
 		}{
 			Post:      p,
@@ -329,9 +327,6 @@ func GetPost(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(response)
 	}
 }
-
-
-
 
 // ---- UPDATE POST ----
 func UpdatePost(db *sql.DB) http.HandlerFunc {
@@ -382,6 +377,18 @@ func UpdatePost(db *sql.DB) http.HandlerFunc {
 
 		log.Println("UpdatePost successful postID:", postID)
 		w.WriteHeader(http.StatusOK)
+		updatedPost := models.Post{
+			ID:        postID,
+			Title:     req.Title,
+			Content:   req.Content,
+			Link:      req.Link,
+			AuthorID:  authorID,
+			UpdatedAt: time.Now(),
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(updatedPost)
+
 	}
 }
 

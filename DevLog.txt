@@ -90,14 +90,16 @@
 - Polished community page UI
 - Changed main page ui a little bit but still gonna tweak more 
 
-
+## 01-01-2026
+- Componentized the previous page button
+- Polished UI for Post page
+- Added commenting on posts
+- Supports deleteing comments
+- Added editing and deleting posts
+- CHangd Post component UI a little
 
 Things left to do:
-Community backend CRUD
-Comments CRUD
 User Profile Retrieve and (edit??)
-Post Editing
-Comments editing
 Smoothen UI/ reorganize messy components
 Explore
 Popular page

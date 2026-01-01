@@ -1,9 +1,11 @@
 // Post.jsx
 import React from "react";
 import { useParams, Link } from "react-router-dom";
+import PostInteractionBar from "../../sections/PostSection/PostInteractionBar";
 
 export default function Post({
   title,
+  content,
   subreddit,
   subredditIcon,
   author,
@@ -14,7 +16,7 @@ export default function Post({
   clink,
 }) {
   return (
-    <article className="w-full my-1 p-1 rounded-md hover:bg-neutral-100 cursor-pointer">
+    <article className="w-full my-1 px-4 py-1 rounded-xl hover:bg-neutral-100 cursor-pointer">
       {/* Subreddit info */}
       <div className="flex items-center mb-2">
         <img
@@ -34,15 +36,18 @@ export default function Post({
       <Link to={link} className="block font-semibold text-gray-900 text-lg mb-2 hover:underline">
         {title}
       </Link>
+      {/* Post content */}
+      <p className="text-base leading-relaxed mb-6">{content}</p>
+      <PostInteractionBar score={score} comments={comments} />
 
-      {/* Author / Score / Comments */}
+      {/* Author / Score / Comments
       <div className="flex items-center text-sm text-gray-500">
         <span>Posted by {author}</span>
         <span className="mx-2">•</span>
         <span>{score} points</span>
         <span className="mx-2">•</span>
         <span>{comments} comments</span>
-      </div>
+      </div> */}
     </article>
   );
 }

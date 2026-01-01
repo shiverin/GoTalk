@@ -8,25 +8,25 @@ export default function PostEditor({ postType, title, content, link, onChangeTit
         placeholder="Title"
         value={title}
         onChange={e => onChangeTitle(e.target.value)}
-        className="border p-2 rounded w-full"
+        className="border p-2 rounded-2xl w-full"
       />
 
       {postType === "text" && (
         <textarea
-          placeholder="Your post content..."
+          placeholder="Body text (optional)"
           value={content}
           onChange={e => onChangeContent(e.target.value)}
-          className="border p-2 rounded w-full h-32"
+          className="border p-2 rounded-2xl w-full h-32"
         />
       )}
 
       {postType === "link" && (
         <input
           type="text"
-          placeholder="Paste your link here..."
+          placeholder="Link URL"
           value={link}
           onChange={e => onChangeLink(e.target.value)}
-          className="border p-2 rounded w-full"
+          className="border p-2 rounded-2xl w-full"
         />
       )}
     </div>

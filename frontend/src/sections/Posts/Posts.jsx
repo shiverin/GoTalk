@@ -30,10 +30,11 @@ export default function Posts({ posts = [] }) {
           const comments = p.comments || [];
 
           return (
-            <div className="border-y px-4" >
+            <div className="border-y px-0" >
             <Post
               key={post.id}
               title={post.title}
+              content={post.content}     
               subreddit={community?.name || "Unknown"}
               subredditIcon={randomIconUrl(community?.id)}
               author={p.author || "Unknown"}
@@ -43,6 +44,7 @@ export default function Posts({ posts = [] }) {
               link={`/posts/${post.id}`}
               clink={`/communities/${post.communityId}`}
             />
+
             </div>
           );
         })}

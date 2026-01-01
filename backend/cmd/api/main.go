@@ -97,6 +97,20 @@ func main() {
 			r.Post("/posts", handlers.CreatePost(db))
 			r.Put("/posts/{postID}", handlers.UpdatePost(db))
 			r.Delete("/posts/{postID}", handlers.DeletePost(db))
+
+			/// Comments
+			r.Post("/posts/{postID}/comments", handlers.CreateComment(db))
+			r.Get("/posts/{postID}/comments", handlers.GetComments(db))
+			r.Route("/comments/{commentID}", func(r chi.Router) {
+				r.Patch("/", handlers.UpdateComment(db))
+				r.Delete("/", handlers.DeleteComment(db))
+			})
+			
+		})
+		// Users
+		r.Route("/users", func(r chi.Router) {
+			r.Get("/{userID}", handlers.GetUserByID(db))
+
 		})
 	})
 

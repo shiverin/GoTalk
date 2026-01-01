@@ -1,12 +1,14 @@
-// internal/models/user.go
 package models
 
-import "time"
+import (
+    "database/sql"
+    "time"
+)
 
 type User struct {
-	ID        int       `json:"id"`
-	Username  string    `json:"username"`
-	Email     string    `json:"email"`
-	Password  string    `json:"-"`        // hide password in JSON
-	CreatedAt time.Time `json:"createdAt"`
+    ID        int            `json:"id"`
+    Username  sql.NullString `json:"username"`
+    Email     sql.NullString `json:"email"`
+    Password  string         `json:"-"` // hidden
+    CreatedAt time.Time      `json:"createdAt"`
 }

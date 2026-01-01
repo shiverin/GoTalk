@@ -114,7 +114,7 @@ export default function CreatePostSection() {
       });
 
       if (!res.ok) throw new Error("Failed to delete post");
-      navigate(`/r/${selectedCommunity}`);
+      navigate(`/communities/${selectedCommunity}`);
     } catch (err) {
       console.error(err);
       alert("Error deleting post.");
@@ -123,7 +123,7 @@ export default function CreatePostSection() {
 
   return (
     <div className="w-full flex flex-col pt-5 pl-20 pr-10">
-      <div className="bg-white rounded-md p-0 shadow">
+      <div className="bg-white rounded-md p-0">
         <h1 className="text-2xl font-bold mb-4">
           {postId ? "Edit Post" : "Create post"}
         </h1>

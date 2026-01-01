@@ -29,16 +29,25 @@ function App() {
             />
             <Route path="/posts/:id" element={<PostPage onLoginClick={openLogin}/>} 
             />
+
+            <Route path="/posts/:postId/edit" element={<CreatePostPage onLoginClick={openLogin} />} 
+            />
+
             <Route path="/users/:id" element={<UserProfilePage onLoginClick={openLogin}/>} 
             />
 
-            <Route path="/c/:communityId/create" element={<CreatePostPage onLoginClick={openLogin} />} />
+            <Route path="/c/:communityId/create" element={<CreatePostPage onLoginClick={openLogin} />} 
+            />
 
-            <Route path="/create" element={<CreatePostPage onLoginClick={openLogin} />} />
+            <Route path="/create" element={<CreatePostPage onLoginClick={openLogin} />} 
+            />
 
             {/* Communities */}
-            <Route path="/communities" element={<CommunityListPage onLoginClick={openLogin}  />} />
-            <Route path="/communities/:id" element={<CommunityPage onLoginClick={openLogin} />} />
+            <Route path="/communities" element={<CommunityListPage onLoginClick={openLogin}  />} 
+            />
+            <Route path="/communities/:id" element={<CommunityPage onLoginClick={openLogin} />} 
+            />
+            
           </Routes>
 
           {/* Login/Signup Modal */}
