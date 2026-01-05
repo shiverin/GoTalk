@@ -1,3 +1,5 @@
-export default function CardContent({ className, ...props }) {
-  return <div className={`p-4 ${className} `} {...props} />;
+import React from "react";
+
+export default function CardContent({ className = "", padding = "p-4", ...props }) {
+  return <div className={`${padding} ${className}`} {...props} />;
 }

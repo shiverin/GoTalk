@@ -2,62 +2,59 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
-function decodeToken(token) {
-  try {
-    return JSON.parse(atob(token.split(".")[1]));
-  } catch (err) {
-    console.error("Invalid token");
-    return null;
-  }
-}
-
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Load user from token on page refresh
+  // Check session on load
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const decoded = decodeToken(token);
-    if (!decoded || !decoded.user_id) return;
-
-    // Fetch user profile from backend
-    fetch(`http://localhost:8080/api/users/${decoded.user_id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setUser({
-          id: data.id,
-          username: data.username,
+    async function checkSession() {
+      try {
+        const res = await fetch("http://localhost:8080/api/auth/me", {
+          credentials: "include",
         });
-      })
-      .catch((err) => console.error("Failed to load user:", err));
+
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+    checkSession();
   }, []);
 
-  // Login handling
-  const login = ({ token }) => {
-    localStorage.setItem("token", token);
+  // login API call
+  const login = async (username, password) => {
+    const res = await fetch("http://localhost:8080/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ username, password }),
+    });
 
-    const decoded = decodeToken(token);
-    if (!decoded || !decoded.user_id) return;
+    if (!res.ok) {
+      throw new Error(await res.text());
+    }
 
-    fetch(`http://localhost:8080/api/users/${decoded.user_id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setUser({
-          id: data.id,
-          username: data.username,
-        });
-      });
+    const data = await res.json();
+    setUser(data.user);
+    return data.user;
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
+  // logout API call
+  const logout = async () => {
+    await fetch("http://localhost:8080/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -38,7 +38,8 @@ export default function CircleButton({ Icon, onClick, size = 10, buttonColor}) {
         outline-none
       "
     >
-      {Icon || <EllipsisHorizontalIcon className="w-5 h-5" />} 
+      {Icon ? React.cloneElement(Icon, { className: "w-5 h-5" }) : <EllipsisHorizontalIcon className="w-5 h-5" />}
+
       {/* default if no icon is passed */}
     </button>
   );

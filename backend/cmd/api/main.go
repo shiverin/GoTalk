@@ -44,6 +44,8 @@ func main() {
 		// Auth routes
 		r.Post("/auth/register", handlers.Register)
 		r.Post("/auth/login", handlers.Login)
+    	r.Post("/auth/refresh", handlers.RefreshToken)
+		r.Post("/auth/logout", handlers.Logout)
 
 		// Communities
 		r.Get("/communities/top/{limit}", func(w http.ResponseWriter, r *http.Request) {
@@ -87,6 +89,8 @@ func main() {
 		// Auth-protected routes
 		r.Group(func(r chi.Router) {
 			r.Use(authMiddleware.RequireAuth)
+
+			r.Get("/auth/me", handlers.Me)
 
 			// ---- Membership APIs ----
 			r.Post("/communities/{id}/join", handlers.JoinCommunity(db))

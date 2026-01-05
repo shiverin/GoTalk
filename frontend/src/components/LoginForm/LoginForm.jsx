@@ -10,45 +10,11 @@ export default function LoginForm({ onClose, switchMode }) {
   const { login } = useAuth();
 
   const handleLogin = async () => {
-
-    if (!username || !password) {
-        setError("All fields are required.");
-        return;
-    }
-    setError("");
-    setLoading(true);
-
     try {
-      const res = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: username, password }),
-      });
-
-      const text = await res.text();
-
-      if (!res.ok) {
-        setError(text); // display backend message
-        setLoading(false);
-        return;
-      }
-
-      let data;
-      try {
-        data = JSON.parse(text); // expect { token: "..." }
-      } catch {
-        data = { token: "" };
-      }
-
-      // Store token and update auth context
-      login({ token: data.token || "", username: username });
-
-      setLoading(false);
-      onClose?.(); // close modal
+      await login(username, password);
+      onClose?.();
     } catch (err) {
-      console.error(err);
-      setError("Network error. Try again.");
-      setLoading(false);
+      setError(err.message);
     }
   };
 

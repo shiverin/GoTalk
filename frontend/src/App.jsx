@@ -8,6 +8,7 @@ import UserProfilePage from "./pages/UserProfilePage.jsx";
 import CreatePostPage from "./pages/CreatePostPage.jsx";
 import CommunityListPage from "./pages/CommunityListPage.jsx";
 import CommunityPage from "./pages/CommunityPage.jsx";
+import PopularPostPage from "./pages/PopularPostPage.jsx";
 
 import "./App.css";
 
@@ -46,6 +47,9 @@ function App() {
             <Route path="/communities" element={<CommunityListPage onLoginClick={openLogin}  />} 
             />
             <Route path="/communities/:id" element={<CommunityPage onLoginClick={openLogin} />} 
+            />
+
+            <Route path="/popular" element={<PopularPostPage onLoginClick={openLogin}/>} 
             />
             
           </Routes>

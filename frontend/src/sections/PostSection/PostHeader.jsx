@@ -12,7 +12,7 @@ export default function PostHeader({ community, author, createdAt, timeAgo, onEd
   const isAuthor = user && author?.id === user?.id;
 
   return (
-    <div className="flex justify-between items-center pr-[3px]">
+    <div className="w-full flex justify-between items-center">
       
       {/* Left side */}
       <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -32,8 +32,8 @@ export default function PostHeader({ community, author, createdAt, timeAgo, onEd
       </div>
 
       {/* Right Dropdown */}
+      <div className="">
       <Dropdown align="right" trigger={<CircleButton size="8" />}>
-        
         {/* If user is author → show edit/delete */}
         {isAuthor ? (
           <>
@@ -48,6 +48,7 @@ export default function PostHeader({ community, author, createdAt, timeAgo, onEd
         )}
 
       </Dropdown>
+      </div>
     </div>
   );
 }

@@ -10,6 +10,8 @@ import CommentList from "./CommentList.jsx";
 import { useAuth } from "../../Context/AuthContext.jsx";           
 import CommentBar from "../../components/CommentBar/CommentBar.jsx";
 
+import PostBar from "../PostBar/PostBar.jsx"; // <-- import sidebar
+
 function timeAgo(dateString) {
   const now = new Date();
   const past = new Date(dateString);
@@ -28,8 +30,8 @@ function timeAgo(dateString) {
 export default function PostSection() {
   const navigate = useNavigate();                                 
   const { user } = useAuth();                                  
-
   const { id } = useParams();
+
   const [post, setPost] = useState(null);
   const [author, setAuthor] = useState("");
   const [community, setCommunity] = useState(null);
@@ -39,70 +41,69 @@ export default function PostSection() {
 
   const [query, setQuery] = useState("");
 
- const handleCommentSubmit = async () => {
-  if (!query.trim()) return;
+    // Handle submitting a new comment
+  const handleCommentSubmit = async () => {
+    if (!query.trim()) return;
 
-  if (!user) {
-    alert("Please log in to comment.");
-    return;
-  }
+    if (!user) {
+      alert("Please log in to comment.");
+      return;
+    }
 
-  try {
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    const res = await fetch(`http://localhost:8080/api/posts/${id}/comments`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ content: query.trim() }),
-    });
+      const res = await fetch(`http://localhost:8080/api/posts/${id}/comments`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: query.trim() }),
+      });
 
-    if (!res.ok) throw new Error("Failed to create comment");
+      if (!res.ok) throw new Error("Failed to create comment");
 
-    const newComment = await res.json();
+      const newComment = await res.json();
 
-    setComments((prev) => [
-      ...prev,
-      {
-        ...newComment,
-        username: user.username,
-      },
-    ]);
+      setComments((prev) => [
+        ...prev,
+        {
+          ...newComment,
+          username: user.username,
+        },
+      ]);
 
+      // Reset input
+      setQuery("");
+    } catch (err) {
+      console.error(err);
+      alert("Could not submit comment.");
+    }
+  };
 
-    // Reset input
-    setQuery("");
-  } catch (err) {
-    console.error(err);
-    alert("Could not submit comment.");
-  }
-};
+  // Handle deleting a comment
+  const handleDeleteComment = async (commentId) => {
+    if (!window.confirm("Delete this comment?")) return;
 
-const handleDeleteComment = async (commentId) => {
-  if (!window.confirm("Delete this comment?")) return;
+    try {
+      const token = localStorage.getItem("token");
 
-  try {
-    const token = localStorage.getItem("token");
-
-    const res = await fetch(
-      `http://localhost:8080/api/comments/${commentId}`,
-      {
+      const res = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    );
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    if (!res.ok) throw new Error("Failed to delete");
+      if (!res.ok) throw new Error("Failed to delete");
 
-    setComments((prev) => prev.filter((c) => c.id !== commentId));
-  } catch (err) {
-    console.error(err);
-    alert("Could not delete comment.");
-  }
-};
+      setComments((prev) => prev.filter((c) => c.id !== commentId));
+    } catch (err) {
+      console.error(err);
+      alert("Could not delete comment.");
+    }
+  };
 
+  // Handle deleting the post
   const handleDelete = async () => {
     if (!window.confirm("Delete this post?")) return;
 
@@ -111,7 +112,7 @@ const handleDeleteComment = async (commentId) => {
 
       const res = await fetch(`http://localhost:8080/api/posts/${id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) throw new Error("Failed to delete");
@@ -124,6 +125,7 @@ const handleDeleteComment = async (commentId) => {
     }
   };
 
+  // Handle editing the post
   const handleEdit = () => {
     navigate(`/posts/${id}/edit`);
   };
@@ -184,60 +186,58 @@ const handleDeleteComment = async (commentId) => {
       </div>
     );
 
-const isAuthor = user?.id === post?.author_id;
+  const isAuthor = user?.id === post?.author_id;
 
   return (
-    <div className="flex justify-center w-[57vw] pl-12 pr-3">
-      <div className="w-full flex gap-4">
-        <div className="flex flex-col gap-4 w-full pt-3">
-          <PostCard className="rounded-2xl">
-            <PostCardContent className="p-0">
-
-              {/* Post header */}
-              <PostHeader
-                community={community}
-                author={author}
-                createdAt={post.createdAt}
-                timeAgo={timeAgo}
-                isAuthor={isAuthor}            
-                onDelete={handleDelete}         
-                onEdit={handleEdit}            
-              />
-
-              {/* Post title */}
-              <h1 className="text-2xl font-bold mb-2">{post.title}</h1>
-
-              {/* Post content */}
-              <p className="text-base leading-relaxed mb-6">{post.content}</p>
-
-              <PostInteractionBar
-                score={post.score ?? 0}
-                commentCount={comments.length}
-              />
-            </PostCardContent>
-          </PostCard>
-
-          <div className="px-4">
-            <CommentBar
-              query={query}
-              setQuery={setQuery}
-              onSubmit={handleCommentSubmit}
+    <div className="flex justify-center gap-0 w-full pt-6">
+      {/* Left: Post content */}
+      <div className="pl-16 flex-1 flex flex-col gap-4 pr-4">
+        <PostCard>
+          <PostCardContent padding="p-0">
+            <PostHeader
+              community={community}
+              author={author}
+              createdAt={post.createdAt}
+              timeAgo={timeAgo}
+              isAuthor={isAuthor}            
+              onDelete={() => handleDelete(post.id)}         
+              onEdit={handleEdit}            
             />
-          </div>
-          <div className="px-4 flex items-center gap-1">
-            <div className="text-xs font-light">Sort by:</div>
-          <PostSortDropdown />
-          </div>
 
-          <CommentList
-            comments={comments}
-            timeAgo={timeAgo}
-            user={user}
-            onDelete={handleDeleteComment}
+            <h1 className="text-2xl font-bold mb-2">{post.title}</h1>
+            <p className="text-base leading-relaxed mb-6">{post.content}</p>
+
+            <PostInteractionBar
+              score={post.score ?? 0}
+              commentCount={comments.length}
+            />
+          </PostCardContent>
+        </PostCard>
+
+        <div className="pr-0">
+          <CommentBar
+            query={query}
+            setQuery={setQuery}
+            onSubmit={handleCommentSubmit}
           />
-
-
         </div>
+
+        <div className="px-0 flex items-center gap-2">
+          <div className="text-xs font-light">Sort by:</div>
+          <PostSortDropdown selected="Best" onSelect={(s) => console.log("Sort:", s)} />
+        </div>
+
+        <CommentList
+          comments={comments}
+          timeAgo={timeAgo}
+          user={user}
+          onDelete={handleDeleteComment}
+        />
+      </div>
+
+      {/* Right: Sidebar */}
+      <div className="w-[26vw] pl-1">
+        {community && <PostBar communityName={community.name} />}
       </div>
     </div>
   );

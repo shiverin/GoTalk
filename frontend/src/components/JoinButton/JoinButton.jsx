@@ -2,20 +2,20 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 
 export default function JoinButton({ communityId }) {
-  const { user } = useAuth(); // Access logged-in user & token
+  const { user } = useAuth();
   const [joined, setJoined] = useState(false);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("token");
-  // Fetch membership status if user is logged in
+
+  // Fetch membership status (cookie-based auth)
   useEffect(() => {
-    if (!user || !token) {
+    if (!user) {
       setJoined(false);
       setLoading(false);
       return;
     }
 
     fetch(`http://localhost:8080/api/communities/${communityId}/joined`, {
-      headers: { Authorization: `Bearer ${token}` },
+      credentials: "include",          // <-- IMPORTANT
     })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch membership");
@@ -27,11 +27,11 @@ export default function JoinButton({ communityId }) {
         setJoined(false);
       })
       .finally(() => setLoading(false));
-  }, [communityId, user, token]);
+  }, [communityId, user]);
 
-  // Join or leave community
+  // Join / Leave
   const toggleJoin = async () => {
-    if (!user || !token) {
+    if (!user) {
       alert("Please log in to join a community.");
       return;
     }
@@ -43,14 +43,14 @@ export default function JoinButton({ communityId }) {
     try {
       const res = await fetch(url, {
         method: "POST",
+        credentials: "include",         // <-- sends HttpOnly cookie
         headers: {
-          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
 
       if (!res.ok) throw new Error("Failed to update membership");
-      setJoined(!joined);
+      setJoined((prev) => !prev);
     } catch (err) {
       console.error("Join/Leave error:", err);
       alert("Something went wrong. Please try again.");

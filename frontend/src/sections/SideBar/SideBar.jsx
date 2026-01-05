@@ -15,7 +15,7 @@ export default function SideBar() {
   // Define your menu items with icons  
   const mainMenuItems = [  
     { id: "home", label: "Home", icon: <Home size={20} />, href: "/" },  
-    { id: "popular", label: "Popular", icon: <BarChart2 size={20} />, href: "/communities" },  
+    { id: "popular", label: "Popular", icon: <BarChart2 size={20} />, href: "/popular" },  
     { id: "explore", label: "Explore", icon: <Compass size={20} />, href: "/communities" },  
   ];  
     

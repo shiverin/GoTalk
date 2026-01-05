@@ -8,7 +8,6 @@ export default function PostPage({onLoginClick}) {
     <Layout onLoginClick={onLoginClick}>
       <div className="flex ">
       <PostSection/>
-      <PostBar/>
       </div>
     </Layout>
   );

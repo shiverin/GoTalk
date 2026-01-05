@@ -1,11 +1,10 @@
 package middleware
 
 import (
-	"context"
-	"net/http"
-	"strings"
+    "context"
+    "net/http"
 
-	"github.com/golang-jwt/jwt/v5"
+    "github.com/golang-jwt/jwt/v5"
 )
 
 var jwtSecret = []byte("dev-secret-change-later")
@@ -15,39 +14,39 @@ type contextKey string
 const userIDKey contextKey = "userID"
 
 func RequireAuth(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" {
-			http.Error(w, "Missing token", http.StatusUnauthorized)
-			return
-		}
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		parts := strings.Split(authHeader, " ")
-		if len(parts) != 2 || parts[0] != "Bearer" {
-			http.Error(w, "Invalid token format", http.StatusUnauthorized)
-			return
-		}
+        // 1. Read JWT from HttpOnly cookie
+        cookie, err := r.Cookie("access_token")
+        if err != nil {
+            http.Error(w, "Unauthorized: no session", http.StatusUnauthorized)
+            return
+        }
 
-		tokenStr := parts[1]
+        tokenStr := cookie.Value
 
-		token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-			return jwtSecret, nil
-		})
+        // 2. Parse and verify JWT
+        token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+            return jwtSecret, nil
+        })
 
-		if err != nil || !token.Valid {
-			http.Error(w, "Invalid token", http.StatusUnauthorized)
-			return
-		}
+        if err != nil || !token.Valid {
+            http.Error(w, "Unauthorized: invalid token", http.StatusUnauthorized)
+            return
+        }
 
-		claims := token.Claims.(jwt.MapClaims)
-		userID := int(claims["user_id"].(float64))
+        // 3. Extract user_id from token claims
+        claims := token.Claims.(jwt.MapClaims)
+        userID := int(claims["user_id"].(float64))
 
-		ctx := context.WithValue(r.Context(), userIDKey, userID)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
+        // 4. Save userID in context
+        ctx := context.WithValue(r.Context(), userIDKey, userID)
+        next.ServeHTTP(w, r.WithContext(ctx))
+    })
 }
 
-// Helper
+// Helper to retrieve user ID
 func GetUserID(r *http.Request) int {
-	return r.Context().Value(userIDKey).(int)
+    id, _ := r.Context().Value(userIDKey).(int)
+    return id
 }

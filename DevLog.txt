@@ -94,13 +94,19 @@
 - Componentized the previous page button
 - Polished UI for Post page
 - Added commenting on posts
-- Supports deleteing comments
+- Supports deleting comments
 - Added editing and deleting posts
 - CHangd Post component UI a little
 
+## 05-01-2026
+- Changed login JWT token storage to HTTP-only cookies for better consistency.
+- Added Popular Post Page sorted by score
+- Integrated top 20 communities api into frontend
+- Added rules section at the right side of Post and Community Page
+- Implemented basic layout of Explore communities page
+
+##
 Things left to do:
 User Profile Retrieve and (edit??)
 Smoothen UI/ reorganize messy components
-Explore
-Popular page
 polish overall UI

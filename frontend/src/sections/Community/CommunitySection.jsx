@@ -4,6 +4,7 @@ import JoinButton from "../../components/JoinButton/JoinButton";
 import PillButton from "../../components/PillButton/PillButton.jsx";
 import { FiTable } from "react-icons/fi";
 import Posts from "../Posts/Posts.jsx";
+import PostBar from "../PostBar/PostBar.jsx";
 
 export default function CommunitySection({ community, posts, loadingPosts }) {
   // Use a stable seed, e.g., community id or name
@@ -90,35 +91,7 @@ export default function CommunitySection({ community, posts, loadingPosts }) {
 
         {/* Right: Sidebar */}
         <div className="w-[30vw]">
-          <div
-                className={`sticky top-[8vh] rounded-md flex flex-col justify-between overflow-y-auto transition-all duration-300 h-[654px]`}
-              >
-                <div className="mt-0 pt-2 px-4 bg-gray-50 rounded-md pb-5"
-                  style={{ minHeight: "380px" }} // dynamic height
-                >
-                <h2 className="text-black font-semibold text-xs mt-6 mb-8">
-                  hihi
-                </h2>
-                </div>
-                      <div className="flex flex-col gap-1 text-gray-500 text-xs mt-8 pl-[16.6px] pb-[13px]">
-                          {/* First line */}
-                          <div className="flex flex-wrap gap-2">
-                              <span className="hover:underline cursor-pointer">goTalk Rules</span>
-                              <span className="hover:underline cursor-pointer">Privacy Policy</span>
-                              <span className="hover:underline cursor-pointer">User Agreement</span>
-                          </div>
-          
-                          {/* Second line */}
-                          <div className="mt-1 hover:underline cursor-pointer">
-                              Accessibility
-                          </div>
-          
-                          {/* Third line */}
-                          <div className="mt-1">
-                              goTalk © 2025. All rights reserved by Shizhen Zhao.
-                          </div>
-                    </div>
-              </div>
+          <PostBar communityName={`${name}`} />
         </div>
       </div>
     </div>

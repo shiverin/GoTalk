@@ -8,10 +8,10 @@ export default function CommentItem({ comment, timeAgo, user, onDelete }) {
   const isAuthor = user?.username === comment.username;
 
   return (
-    <PostCard className="rounded-xl">
-      <PostCardContent className="py-2">
+    <PostCard>
+      <PostCardContent className="py-2" padding="px-0">
         
-        <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center justify-between mb-1 pr-1">
 
           {/* LEFT SIDE */}
           <div className="flex gap-1 items-center">
