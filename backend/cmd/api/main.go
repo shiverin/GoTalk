@@ -109,6 +109,11 @@ func main() {
 				r.Patch("/", handlers.UpdateComment(db))
 				r.Delete("/", handlers.DeleteComment(db))
 			})
+			// Communities CRUD
+			r.Post("/communities", handlers.CreateCommunity(db))           // Create a new community
+			r.Put("/communities/{communityID}", handlers.UpdateCommunity(db)) // Update community
+			r.Delete("/communities/{communityID}", handlers.DeleteCommunity(db)) // Delete community
+
 			
 		})
 		// Users

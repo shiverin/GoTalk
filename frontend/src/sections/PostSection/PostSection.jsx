@@ -91,6 +91,7 @@ export default function PostSection() {
 
       const res = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
         method: "DELETE",
+        credentials: "include",
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -112,6 +113,7 @@ export default function PostSection() {
 
       const res = await fetch(`http://localhost:8080/api/posts/${id}`, {
         method: "DELETE",
+        credentials: "include",
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -127,7 +129,7 @@ export default function PostSection() {
 
   // Handle editing the post
   const handleEdit = () => {
-    navigate(`/posts/${id}/edit`);
+    navigate(`/posts/${id}/edit/${community?.id}`);
   };
 
   // Fetch post data
@@ -186,7 +188,7 @@ export default function PostSection() {
       </div>
     );
 
-  const isAuthor = user?.id === post?.author_id;
+  const isAuthor = user?.id === author?.id;
 
   return (
     <div className="flex justify-center gap-0 w-full pt-6">
@@ -201,7 +203,8 @@ export default function PostSection() {
               timeAgo={timeAgo}
               isAuthor={isAuthor}            
               onDelete={() => handleDelete(post.id)}         
-              onEdit={handleEdit}            
+              onEdit={handleEdit}     
+              authorId={author?.id}
             />
 
             <h1 className="text-2xl font-bold mb-2">{post.title}</h1>

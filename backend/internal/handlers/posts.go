@@ -89,12 +89,14 @@ func GetPosts(db *sql.DB) http.HandlerFunc {
 		defer rows.Close()
 
 		var posts []struct {
-			Post      models.Post      `json:"post"`
-			Author    string           `json:"author"`
-			Community models.Community `json:"community"`
-			Comments  []models.Comment `json:"comments"`
-			Score     int              `json:"score"`
+			Post          models.Post      `json:"post"`
+			Author        string           `json:"author"`
+			Community     models.Community `json:"community"`
+			Comments      []models.Comment `json:"comments"`
+			Score         int              `json:"score"`
+			CommentsCount int              `json:"commentsCount"`
 		}
+
 
 		for rows.Next() {
 			var p models.Post
@@ -190,12 +192,14 @@ func GetPosts(db *sql.DB) http.HandlerFunc {
 				Community models.Community `json:"community"`
 				Comments  []models.Comment `json:"comments"`
 				Score     int              `json:"score"`
+    			CommentsCount int              `json:"commentsCount"`
 			}{
 				Post:      p,
 				Author:    author,
 				Community: community,
 				Comments:  postComments,
 				Score:     p.Score,
+				CommentsCount: int(commentsCount.Int64),  // 👈 add this
 			})
 		}
 
@@ -207,6 +211,7 @@ func GetPosts(db *sql.DB) http.HandlerFunc {
 // ---- GET SINGLE POST ----
 func GetPost(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		// Parse post ID from URL
 		postIDStr := chi.URLParam(r, "postID")
 		postID, err := strconv.Atoi(postIDStr)
 		if err != nil {
@@ -216,6 +221,7 @@ func GetPost(db *sql.DB) http.HandlerFunc {
 		}
 		log.Println("GetPost called for postID:", postID)
 
+		// Post query
 		var p models.Post
 		var createdAtStr, updatedAtStr string
 		var link sql.NullString
@@ -248,6 +254,7 @@ func GetPost(db *sql.DB) http.HandlerFunc {
 			p.Link = ""
 		}
 
+		// Parse timestamps
 		p.CreatedAt, err = time.Parse(time.RFC3339, createdAtStr)
 		if err != nil {
 			log.Println("GetPost time.Parse created_at error:", err)
@@ -261,9 +268,14 @@ func GetPost(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		// Fetch post author username
-		var authorName string
-		if err := db.QueryRow(`SELECT username FROM users WHERE id = ?`, p.AuthorID).Scan(&authorName); err != nil {
+		// Fetch full author object
+		type AuthorResponse struct {
+			ID       int    `json:"id"`
+			Username string `json:"username"`
+		}
+		var author AuthorResponse
+		if err := db.QueryRow(`SELECT id, username FROM users WHERE id = ?`, p.AuthorID).
+			Scan(&author.ID, &author.Username); err != nil {
 			log.Println("GetPost author lookup error:", err)
 			http.Error(w, "Failed to fetch author", http.StatusInternalServerError)
 			return
@@ -277,7 +289,7 @@ func GetPost(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		// Fetch comments with usernames
+		// Fetch comments with full username
 		commentRows, err := db.Query(`
 			SELECT c.id, c.content, c.author_id, u.username, c.post_id, c.created_at, c.updated_at
 			FROM comments c
@@ -310,23 +322,24 @@ func GetPost(db *sql.DB) http.HandlerFunc {
 			comments = append(comments, c)
 		}
 
+		// Response struct with full author object
 		response := struct {
 			Post      models.Post           `json:"post"`
-			Author    string                `json:"author"`
+			Author    AuthorResponse        `json:"author"` // now includes id + username
 			Community models.Community      `json:"community"`
 			Comments  []CommentWithUsername `json:"comments"`
 		}{
 			Post:      p,
-			Author:    authorName,
+			Author:    author,
 			Community: community,
 			Comments:  comments,
 		}
 
-		log.Printf("GetPost returning postID: %d, title: %s, comments: %d\n", p.ID, p.Title, len(comments))
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
 	}
 }
+
 
 // ---- UPDATE POST ----
 func UpdatePost(db *sql.DB) http.HandlerFunc {

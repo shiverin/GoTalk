@@ -9,58 +9,52 @@ export default function CreatePostSection() {
   const { communityId, postId } = useParams(); // postId for editing
   const navigate = useNavigate();
 
-  const [selectedCommunity, setSelectedCommunity] = useState(communityId || null);
+  // Only initialize from URL once
+  const [selectedCommunity, setSelectedCommunity] = useState(() => 
+    communityId ? Number(communityId) : null
+  );
   const [postType, setPostType] = useState("text"); // 'text', 'link', 'image'
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [link, setLink] = useState("");
   const [communities, setCommunities] = useState([]);
 
-  // Get JWT token from localStorage
-  const token = localStorage.getItem("token");
+  console.log("Selected community:", selectedCommunity);
 
-  // Fetch all communities from backend
   useEffect(() => {
     fetch("http://localhost:8080/api/communities", {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      credentials: "include",
     })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch communities");
         return res.json();
       })
-      .then(data => setCommunities(data))
-      .catch(err => console.warn("Failed to fetch communities:", err));
-  }, [token]);
+      .then((data) => setCommunities(data))
+      .catch((err) => console.warn("Failed to fetch communities:", err));
+  }, []);
 
-  // Prefill data if editing
   useEffect(() => {
     if (!postId) return;
 
     fetch(`http://localhost:8080/api/posts/${postId}`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      credentials: "include",
     })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch post");
         return res.json();
       })
-      .then(data => {
+      .then((data) => {
         setTitle(data.post.title);
         setContent(data.post.content || "");
         setLink(data.post.link || "");
-        setSelectedCommunity(data.post.community?.id || "");
         setPostType(data.post.link ? "link" : "text");
       })
-      .catch(err => console.error("Failed to fetch post for editing:", err));
-  }, [postId, token]);
+      .catch((err) => console.error("Failed to fetch post for editing:", err));
+  }, [postId]);
 
   const handleSubmit = async () => {
     if (!title || !selectedCommunity) {
       alert("Please provide a title and select a community.");
-      return;
-    }
-
-    if (!token) {
-      alert("You must be logged in to create or edit a post.");
       return;
     }
 
@@ -79,10 +73,8 @@ export default function CreatePostSection() {
     try {
       const res = await fetch(url, {
         method,
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        credentials: "include", 
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
@@ -100,17 +92,10 @@ export default function CreatePostSection() {
 
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
-    if (!token) {
-      alert("You must be logged in to delete a post.");
-      return;
-    }
-
     try {
       const res = await fetch(`http://localhost:8080/api/posts/${postId}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        credentials: "include", 
       });
 
       if (!res.ok) throw new Error("Failed to delete post");
@@ -132,6 +117,7 @@ export default function CreatePostSection() {
           communities={communities}
           selected={selectedCommunity}
           onSelect={setSelectedCommunity}
+          disabled={!!postId} 
         />
 
         <PostTypeTabs selected={postType} onSelect={setPostType} />

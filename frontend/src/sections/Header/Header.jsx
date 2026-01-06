@@ -14,7 +14,6 @@ import {
   MdChatBubbleOutline,
   MdAdd,
   MdNotificationsNone,
-  MdLogin
 } from "react-icons/md";
 
 export default function Header({ onLoginClick, communityId }) {

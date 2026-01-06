@@ -14,58 +14,61 @@ import (
 // ---- JOIN COMMUNITY ----
 func JoinCommunity(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("🔥 JoinCommunity handler triggered")
+		//log.Println("JoinCommunity handler triggered")
 
 		communityIDStr := chi.URLParam(r, "id")
 		communityID, err := strconv.Atoi(communityIDStr)
 		if err != nil {
-			log.Println("❌ Invalid community ID:", err)
+			//log.Println("Invalid community ID:", err)
 			http.Error(w, "Invalid community ID", http.StatusBadRequest)
 			return
 		}
 
 		userID := auth.GetUserID(r)
-		log.Printf("👉 User %d joining community %d\n", userID, communityID)
+		log.Printf("User %d joining community %d\n", userID, communityID)
+
+		// Example: every user joins as "member"
+		role := "member"
 
 		tx, err := db.Begin()
 		if err != nil {
-			log.Println("❌ Failed to begin transaction:", err)
+			//log.Println("Failed to begin transaction:", err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 		defer tx.Rollback()
 
-		// Insert membership
+		// Insert membership WITH role
 		_, err = tx.Exec(`
-			INSERT INTO community_members (user_id, community_id)
-			VALUES (?, ?)
-			ON CONFLICT(user_id, community_id) DO NOTHING
-		`, userID, communityID)
+            INSERT INTO community_members (user_id, community_id, role)
+            VALUES (?, ?, ?)
+            ON CONFLICT(user_id, community_id) DO NOTHING;
+        `, userID, communityID, role)
 		if err != nil {
-			log.Println("❌ SQL Error inserting membership:", err)
+			//log.Println("SQL Error inserting membership:", err)
 			http.Error(w, "Failed to join community", http.StatusInternalServerError)
 			return
 		}
 
 		// Update member count
 		_, err = tx.Exec(`
-			UPDATE communities
-			SET members = members + 1
-			WHERE id = ?;
-		`, communityID)
+            UPDATE communities
+            SET members = members + 1
+            WHERE id = ?;
+        `, communityID)
 		if err != nil {
-			log.Println("❌ SQL Error updating member count:", err)
+			//log.Println("SQL Error updating member count:", err)
 			http.Error(w, "Failed to update member count", http.StatusInternalServerError)
 			return
 		}
 
 		if err := tx.Commit(); err != nil {
-			log.Println("❌ Transaction commit failed:", err)
+			//log.Println("Transaction commit failed:", err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 
-		log.Println("✅ Join successful")
+		//log.Println("Join successful")
 		json.NewEncoder(w).Encode(map[string]string{"status": "joined"})
 	}
 }
@@ -73,22 +76,22 @@ func JoinCommunity(db *sql.DB) http.HandlerFunc {
 // ---- LEAVE COMMUNITY ----
 func LeaveCommunity(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("🔥 LeaveCommunity handler triggered")
+		//log.Println("LeaveCommunity handler triggered")
 
 		communityIDStr := chi.URLParam(r, "id")
 		communityID, err := strconv.Atoi(communityIDStr)
 		if err != nil {
-			log.Println("❌ Invalid community ID:", err)
+			//log.Println("Invalid community ID:", err)
 			http.Error(w, "Invalid community ID", http.StatusBadRequest)
 			return
 		}
 
 		userID := auth.GetUserID(r)
-		log.Printf("👉 User %d leaving community %d\n", userID, communityID)
+		//log.Printf("User %d leaving community %d\n", userID, communityID)
 
 		tx, err := db.Begin()
 		if err != nil {
-			log.Println("❌ Failed to begin transaction:", err)
+			//log.Println("Failed to begin transaction:", err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
@@ -100,7 +103,7 @@ func LeaveCommunity(db *sql.DB) http.HandlerFunc {
 			WHERE user_id = ? AND community_id = ?;
 		`, userID, communityID)
 		if err != nil {
-			log.Println("❌ SQL Error deleting membership:", err)
+			//log.Println("SQL Error deleting membership:", err)
 			http.Error(w, "Failed to leave community", http.StatusInternalServerError)
 			return
 		}
@@ -112,18 +115,18 @@ func LeaveCommunity(db *sql.DB) http.HandlerFunc {
 			WHERE id = ? AND members > 0;
 		`, communityID)
 		if err != nil {
-			log.Println("❌ SQL Error updating member count:", err)
+			//log.Println("SQL Error updating member count:", err)
 			http.Error(w, "Failed to update member count", http.StatusInternalServerError)
 			return
 		}
 
 		if err := tx.Commit(); err != nil {
-			log.Println("❌ Transaction commit failed:", err)
+			//log.Println("Transaction commit failed:", err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 
-		log.Println("✅ Leave successful")
+		//log.Println("Leave successful")
 		json.NewEncoder(w).Encode(map[string]string{"status": "left"})
 	}
 }
@@ -131,18 +134,18 @@ func LeaveCommunity(db *sql.DB) http.HandlerFunc {
 // ---- CHECK MEMBERSHIP ----
 func CheckMembership(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("🔥 CheckMembership handler triggered")
+		//log.Println("CheckMembership handler triggered")
 
 		communityIDStr := chi.URLParam(r, "id")
 		communityID, err := strconv.Atoi(communityIDStr)
 		if err != nil {
-			log.Println("❌ Invalid community ID:", err)
+			//log.Println("Invalid community ID:", err)
 			http.Error(w, "Invalid community ID", http.StatusBadRequest)
 			return
 		}
 
 		userID := auth.GetUserID(r)
-		log.Printf("👉 Checking membership: user=%d community=%d\n", userID, communityID)
+		//log.Printf("Checking membership: user=%d community=%d\n", userID, communityID)
 
 		var exists int
 		err = db.QueryRow(`
@@ -151,12 +154,12 @@ func CheckMembership(db *sql.DB) http.HandlerFunc {
 		`, userID, communityID).Scan(&exists)
 
 		if err != nil && err != sql.ErrNoRows {
-			log.Println("❌ SQL Error:", err)
+			//log.Println("SQL Error:", err)
 			http.Error(w, "Failed to check membership", http.StatusInternalServerError)
 			return
 		}
 
-		log.Println("🔎 Joined =", exists == 1)
+		//log.Println("Joined =", exists == 1)
 		json.NewEncoder(w).Encode(map[string]bool{
 			"joined": exists == 1,
 		})

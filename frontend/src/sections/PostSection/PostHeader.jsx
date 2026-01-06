@@ -5,11 +5,18 @@ import { DropdownItem } from "../../components/DropdownMenu/DropdownItem.jsx";
 import CircleButton from "../../components/CircleButton/CircleButton.jsx";
 import { useAuth } from "../../Context/AuthContext.jsx";
 
-export default function PostHeader({ community, author, createdAt, timeAgo, onEdit, onDelete }) {
+export default function PostHeader({
+  community,
+  author,
+  authorId,
+  createdAt,
+  timeAgo,
+  onEdit,
+  onDelete,
+  isAuthor,
+}) {
   const navigate = useNavigate();
   const { user } = useAuth();
-
-  const isAuthor = user && author?.id === user?.id;
 
   return (
     <div className="w-full flex justify-between items-center">
@@ -23,31 +30,43 @@ export default function PostHeader({ community, author, createdAt, timeAgo, onEd
           <ArrowLeft size={20} />
         </button>
 
-        <div>
+        <div className="flex flex-col">
           <div>
-            <span className="font-medium">r/{community?.name}</span> • {timeAgo(createdAt)}
+            {/* Clickable community name */}
+            <span
+              onClick={() => navigate(`/communities/${community?.id}`)}
+              className="font-medium hover:underline cursor-pointer"
+            >
+              r/{community?.name}
+            </span>{" "}
+            • {timeAgo(createdAt)}
           </div>
-          <div className="font-medium">{author}</div>
+          {/* Clickable author name */}
+          <div
+            onClick={() => navigate(`/users/${authorId}`)}
+            className="font-medium hover:underline cursor-pointer"
+          >
+            {author?.username || "Unknown"}
+          </div>
         </div>
       </div>
 
       {/* Right Dropdown */}
-      <div className="">
-      <Dropdown align="right" trigger={<CircleButton size="8" />}>
-        {/* If user is author → show edit/delete */}
-        {isAuthor ? (
-          <>
-            <DropdownItem onClick={onEdit}>Edit Post</DropdownItem>
-            <DropdownItem onClick={onDelete}>Delete Post</DropdownItem>
-          </>
-        ) : (
-          <>
-            <DropdownItem>Advertise with goTalk</DropdownItem>
-            <DropdownItem>Try goTalk Pro</DropdownItem>
-          </>
-        )}
-
-      </Dropdown>
+      <div>
+        <Dropdown align="right" trigger={<CircleButton size="8" />}>
+          {/* If user is author → show edit/delete */}
+          {isAuthor ? (
+            <>
+              <DropdownItem onClick={onEdit}>Edit Post</DropdownItem>
+              <DropdownItem onClick={onDelete}>Delete Post</DropdownItem>
+            </>
+          ) : (
+            <>
+              <DropdownItem>Advertise with goTalk</DropdownItem>
+              <DropdownItem>Try goTalk Pro</DropdownItem>
+            </>
+          )}
+        </Dropdown>
       </div>
     </div>
   );

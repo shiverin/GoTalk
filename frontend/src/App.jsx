@@ -31,7 +31,9 @@ function App() {
             <Route path="/posts/:id" element={<PostPage onLoginClick={openLogin}/>} 
             />
 
-            <Route path="/posts/:postId/edit" element={<CreatePostPage onLoginClick={openLogin} />} 
+            <Route
+              path="/posts/:postId/edit/:communityId"
+              element={<CreatePostPage onLoginClick={openLogin} />}
             />
 
             <Route path="/users/:id" element={<UserProfilePage onLoginClick={openLogin}/>} 

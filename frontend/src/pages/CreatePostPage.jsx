@@ -4,11 +4,9 @@ import Layout from "./Layout.jsx";
 import CreatePostSection from "../sections/CreatePost/CreatePostSection.jsx";
 
 export default function CreatePostPage({onLoginClick}) {
-const { communityId } = useParams();
-console.log(communityId);
 
   return (
-    <Layout onLoginClick={onLoginClick} communityId={communityId}>
+    <Layout onLoginClick={onLoginClick}>
       <div className="flex w-[56vw]">
         <CreatePostSection />
       </div>

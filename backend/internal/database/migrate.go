@@ -77,6 +77,7 @@ func CreateTables(db *sql.DB) {
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		user_id INTEGER NOT NULL,
 		community_id INTEGER NOT NULL,
+		role TEXT NOT NULL DEFAULT 'member',   -- NEW COLUMN
 		joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		FOREIGN KEY (user_id) REFERENCES users(id),
 		FOREIGN KEY (community_id) REFERENCES communities(id),
@@ -92,7 +93,22 @@ func CreateTables(db *sql.DB) {
 		voteTable,
 		memberTable,
 	}
+	// Run creation queries...
+	for _, q := range queries {
+		_, err := db.Exec(q)
+		if err != nil {
+			log.Fatalf("Could not create table: %v\nQuery: %s", err, q)
+		}
+	}
 
+	// --- Safe migration for existing DBs ---
+	_, err := db.Exec(`
+		ALTER TABLE community_members
+		ADD COLUMN role TEXT NOT NULL DEFAULT 'member';
+	`)
+	if err != nil {
+		log.Println("[INFO] 'role' column exists — skipping migration.")
+	}
 	for _, q := range queries {
 		_, err := db.Exec(q)
 		if err != nil {

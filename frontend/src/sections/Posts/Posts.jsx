@@ -20,31 +20,32 @@ function getTimeAgo(timestamp) {
 // Helper to get a random icon based on community id
 const randomIconUrl = (seed) => `https://api.dicebear.com/7.x/shapes/svg?seed=${seed}`;
 
-export default function Posts({ posts = [] }) {
+export default function Posts({ posts }) {
+  const safePosts = posts || []; // fallback to empty array if null
   return (
     <section className="bg-white max-w-[1200px] min-h-[2000px] p-0">
       <div className="flex flex-col gap-0">
-        {posts.map((p) => {
-          const post = p.post;
+        {safePosts.map((p) => {
+          const post = p?.post;
+          if (!post) return null; // skip if post is null
+
           const community = p.community;
           const comments = p.comments || [];
 
           return (
-            <div className="border-y px-0" >
-            <Post
-              key={post.id}
-              title={post.title}
-              content={post.content}     
-              subreddit={community?.name || "Unknown"}
-              subredditIcon={randomIconUrl(community?.id)}
-              author={p.author || "Unknown"}
-              timeAgo={getTimeAgo(post.createdAt)}
-              score={post.score ?? 0}
-              comments={comments.length}
-              link={`/posts/${post.id}`}
-              clink={`/communities/${post.communityId}`}
-            />
-
+            <div className="border-y px-0" key={post.id}>
+              <Post
+                title={post.title}
+                content={post.content}
+                subreddit={community?.name || "Unknown"}
+                subredditIcon={randomIconUrl(community?.id)}
+                author={p.author || "Unknown"}
+                timeAgo={getTimeAgo(post.createdAt)}
+                score={post.score ?? 0}
+                comments={comments.length}
+                link={`/posts/${post.id}`}
+                clink={`/communities/${post.communityId}`}
+              />
             </div>
           );
         })}

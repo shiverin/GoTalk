@@ -105,8 +105,18 @@
 - Added rules section at the right side of Post and Community Page
 - Implemented basic layout of Explore communities page
 
-##
+## 06-01-2026
+- Added Creating Communities Modal and integrated with backend
+- Made sorting post options interactable
+- Started integration of user profile view
+- Fixed some bugs with editing post
+
+
+
+
 Things left to do:
+delete community
+voting crud
 User Profile Retrieve and (edit??)
 Smoothen UI/ reorganize messy components
 polish overall UI
