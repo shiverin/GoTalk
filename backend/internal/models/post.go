@@ -13,6 +13,4 @@ type Post struct {
 	CreatedAt   time.Time `json:"createdAt"`
 	UpdatedAt   time.Time `json:"updatedAt"`
 	Score       int       `json:"score,omitempty"`
-	// Author        string `json:"author,omitempty"`       // username
-	// CommunityName string `json:"communityName,omitempty"` // community name
 }

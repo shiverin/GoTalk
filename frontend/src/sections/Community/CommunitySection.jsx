@@ -5,6 +5,21 @@ import PillButton from "../../components/PillButton/PillButton.jsx";
 import { FiTable } from "react-icons/fi";
 import Posts from "../Posts/Posts.jsx";
 import PostBar from "../PostBar/PostBar.jsx";
+import { useAuth } from "../../Context/AuthContext.jsx";
+import CircleButton from "../../components/CircleButton/CircleButton.jsx";
+import Dropdown from "../../components/DropdownMenu/DropdownMenu.jsx";
+import { DropdownItem } from "../../components/DropdownMenu/DropdownItem.jsx";
+
+export async function deleteCommunity(communityId) {
+  const res = await fetch(`/api/communities/${communityId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to delete community");
+  }
+}
 
 export default function CommunitySection({ community, posts, loadingPosts }) {
   // Use a stable seed, e.g., community id or name
@@ -16,7 +31,20 @@ export default function CommunitySection({ community, posts, loadingPosts }) {
   const online = community?.onlineCount || 0;
   const description = community?.description || "No description available";
   const createdAt = community?.createdAt || "Unknown date";
+  const { user } = useAuth(); // ⬅️ current logged-in user
 
+  const isOwner = user?.id === community?.owner_id; // ⬅️ check owner
+  async function onDeleteCommunity(id) {
+    if (!confirm("Are you sure you want to delete this community?")) return;
+
+    try {
+      await deleteCommunity(id);
+      window.location.href = "/"; // Redirect after delete
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete community");
+    }
+  }
   return (
     <div className="px-16 pt-2">
       {/* Banner */}
@@ -36,8 +64,22 @@ export default function CommunitySection({ community, posts, loadingPosts }) {
           <div>
             <h1 className="text-3xl font-bold">g/{name}</h1>
           </div>
-          <JoinButton communityId={community?.id} />
+          <div className="flex gap-2">
+              <JoinButton communityId={community?.id} />
+              {/* Owner-only button */}
+              {isOwner && (
+                <Dropdown
+                  align="right"
+                  trigger={<CircleButton size="8" />}
+                >
+                  <DropdownItem onClick={() => onDeleteCommunity(community.id)}>
+                    Delete Community
+                  </DropdownItem>
+                </Dropdown>
+              )}
+          </div>
         </div>
+
       </div>
 
       {/* Page Layout */}

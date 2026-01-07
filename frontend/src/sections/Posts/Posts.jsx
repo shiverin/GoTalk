@@ -23,7 +23,7 @@ const randomIconUrl = (seed) => `https://api.dicebear.com/7.x/shapes/svg?seed=${
 export default function Posts({ posts }) {
   const safePosts = posts || []; // fallback to empty array if null
   return (
-    <section className="bg-white max-w-[1200px] min-h-[2000px] p-0">
+    <section className="bg-white max-w-[1200px] min-h-[0px] p-0">
       <div className="flex flex-col gap-0">
         {safePosts.map((p) => {
           const post = p?.post;

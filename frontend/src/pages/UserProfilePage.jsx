@@ -5,22 +5,44 @@ import UserProfile from "../sections/UserProfile/UserProfile.jsx";
 import UserBar from "../sections/UserBar/UserBar.jsx";
 
 export default function UserProfilePage({ onLoginClick }) {
-  const { id } = useParams(); // grabs :id from /users/:id
+  const { id } = useParams();
+
   const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [comments, setComments] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchUser() {
+    async function loadProfile() {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:8080/api/users/${id}`, {
-          credentials: "include", // if your API uses cookies
-        });
 
-        if (!res.ok) throw new Error("Failed to fetch user");
-        const data = await res.json();
-        setUser(data); // assumes API returns the user object
+        // Fetch user
+        const userRes = await fetch(`http://localhost:8080/api/users/${id}`, {
+          credentials: "include",
+        });
+        if (!userRes.ok) throw new Error("Failed to fetch user");
+        const userData = await userRes.json();
+        setUser(userData);
+
+        // Fetch user's posts
+        const postsRes = await fetch(
+          `http://localhost:8080/api/users/${id}/posts`,
+          { credentials: "include" }
+        );
+        const postsData = postsRes.ok ? await postsRes.json() : [];
+        setPosts(postsData);
+
+        // Fetch user's comments
+        const commentsRes = await fetch(
+          `http://localhost:8080/api/users/${id}/comments`,
+          { credentials: "include" }
+        );
+        const commentsData = commentsRes.ok ? await commentsRes.json() : [];
+        setComments(commentsData);
+
       } catch (err) {
         console.error(err);
         setError(err.message);
@@ -29,18 +51,18 @@ export default function UserProfilePage({ onLoginClick }) {
       }
     }
 
-    fetchUser();
+    loadProfile();
   }, [id]);
 
-  if (loading) return <div className="text-center mt-20">Loading user...</div>;
+  if (loading) return <div className="text-center mt-20">Loading profile...</div>;
   if (error) return <div className="text-center mt-20 text-red-600">{error}</div>;
   if (!user) return <div className="text-center mt-20">User not found</div>;
 
   return (
     <Layout onLoginClick={onLoginClick}>
       <div className="flex">
-        <UserProfile user={user} />
-        <UserBar user={user} />
+        <UserProfile user={user} posts={posts} comments={comments} />
+        <UserBar user={user} posts={posts} comments={comments} />
       </div>
     </Layout>
   );

@@ -1,10 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { FaUser, FaEdit, FaDraftingCompass, FaTrophy, FaMoneyBill, FaCrown, FaMoon, FaBullhorn, FaRocket, FaCog, FaSignOutAlt } from "react-icons/fa";
 import AbsoluteDropdown from "../../components/DropdownMenu/AbsoluteDropdown";
 import { DropdownItem } from "../../components/DropdownMenu/DropdownItem";
 import CircleButton from "../../components/CircleButton/CircleButton";
 
+const randomIconUrl = (seed) =>
+  `https://api.dicebear.com/7.x/shapes/svg?seed=${seed}`;
+
 export default function ProfileDropdown({ user, logout }) {
+  const navigate = useNavigate();
   return (
     <AbsoluteDropdown
       align="screen-right"
@@ -12,12 +17,12 @@ export default function ProfileDropdown({ user, logout }) {
     >
         {/* User Info as a DropdownItem with avatar as icon */}
         <div
-        onClick={() => console.log("Edit Avatar")}
+        onClick={() => navigate(`/users/${user.id}`)}
         className="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-gray-100 select-none"
         >
         {/* Avatar */}
         <img
-            src={user.avatarUrl}
+            src={randomIconUrl(user.username)}
             alt={`Avatar for ${user.username}`}
             className="w-8 h-8 rounded-full" // customize size here
         />
@@ -53,10 +58,10 @@ export default function ProfileDropdown({ user, logout }) {
           Log Out
         </DropdownItem>
         <DropdownItem icon={<FaBullhorn />} onClick={() => console.log("Advertise")}>
-          Advertise on Reddit
+          Advertise on GoTalk
         </DropdownItem>
         <DropdownItem icon={<FaRocket />} onClick={() => console.log("Try Pro")}>
-          Try Reddit Pro (BETA)
+          Try GoTalk Pro (BETA)
         </DropdownItem>
         <DropdownItem icon={<FaCog />} onClick={() => console.log("Settings")}>
           Settings

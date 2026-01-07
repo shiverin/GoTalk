@@ -38,7 +38,7 @@ export default function Post({
       </Link>
       {/* Post content */}
       <p className="text-base leading-relaxed mb-6">{content}</p>
-      <PostInteractionBar score={score} comments={comments} />
+      <PostInteractionBar score={score} commentCount={comments} />
 
       {/* Author / Score / Comments
       <div className="flex items-center text-sm text-gray-500">

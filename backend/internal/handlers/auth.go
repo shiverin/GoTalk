@@ -125,16 +125,34 @@ func Me(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    var username string
-    database.DB.QueryRow(`SELECT username FROM users WHERE id = ?`, userID).Scan(&username)
+    // Variables to scan DB values into
+    var (
+        username  string
+        createdAt string // or time.Time
+    )
 
+    // Fetch BOTH username and created_at
+    err := database.DB.QueryRow(`
+        SELECT username, created_at 
+        FROM users 
+        WHERE id = ?
+    `, userID).Scan(&username, &createdAt)
+
+    if err != nil {
+        http.Error(w, "Failed to fetch user", http.StatusInternalServerError)
+        return
+    }
+
+    // Return JSON response
     json.NewEncoder(w).Encode(map[string]interface{}{
         "user": map[string]interface{}{
-            "id": userID,
-            "username": username,
+            "id":        userID,
+            "username":  username,
+            "createdAt": createdAt,
         },
     })
 }
+
 
 
 func RefreshToken(w http.ResponseWriter, r *http.Request) {

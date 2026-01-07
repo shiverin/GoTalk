@@ -49,11 +49,15 @@ export default function JoinButton({ communityId }) {
         },
       });
 
-      if (!res.ok) throw new Error("Failed to update membership");
+    if (!res.ok) {
+      const errData = await res.json().catch(() => null);
+      const msg = errData?.error || "Failed to update membership";
+      alert(msg);
+      throw new Error(msg);
+    }
       setJoined((prev) => !prev);
     } catch (err) {
       console.error("Join/Leave error:", err);
-      alert("Something went wrong. Please try again.");
     }
   };
 

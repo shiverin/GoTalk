@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/shiverin/gotalk/backend/internal/models"
 	auth "github.com/shiverin/gotalk/backend/internal/middleware"
+	"github.com/shiverin/gotalk/backend/internal/models"
 )
 
 func CreateCommunity(db *sql.DB) http.HandlerFunc {
@@ -21,14 +21,14 @@ func CreateCommunity(db *sql.DB) http.HandlerFunc {
 		}
 
 		c.CreatedAt = time.Now()
-		
+
+		// Insert into communities
 		result, err := db.Exec(
 			`INSERT INTO communities 
-				(name, icon, description, is_private, rules, created_at, members) 
-			VALUES (?, ?, ?, ?, ?, ?, ?)`,
-			c.Name, c.Icon, c.Description, c.IsPrivate, c.Rules, c.CreatedAt, 1, // set members = 1
+                (name, icon, description, is_private, rules, created_at, members) 
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+			c.Name, c.Icon, c.Description, c.IsPrivate, c.Rules, c.CreatedAt, 1,
 		)
-
 		if err != nil {
 			http.Error(w, "Failed to create community", http.StatusInternalServerError)
 			return
@@ -36,16 +36,20 @@ func CreateCommunity(db *sql.DB) http.HandlerFunc {
 
 		communityID, _ := result.LastInsertId()
 		c.ID = int(communityID)
-		c.Members = 1 // creator counts as first member
+		c.Members = 1
 		c.PostsCount = 0
 
-		// 2️⃣ Assign creator as owner
-		userID := auth.GetUserID(r) // your function to get logged-in user ID
+		// ⭐ Get logged in user ID (community owner)
+		userID := auth.GetUserID(r)
+		c.OwnerID = userID // ⭐ return owner to frontend
+
+		// Insert owner into community_members table
 		_, err = db.Exec(
 			`INSERT INTO community_members (user_id, community_id, role, joined_at)
-			 VALUES (?, ?, ?, ?)`,
+             VALUES (?, ?, ?, ?)`,
 			userID, communityID, "owner", time.Now(),
 		)
+
 		if err != nil {
 			http.Error(w, "Failed to assign community owner", http.StatusInternalServerError)
 			return
@@ -55,7 +59,6 @@ func CreateCommunity(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(c)
 	}
 }
-
 
 // UpdateCommunity updates an existing community
 func UpdateCommunity(db *sql.DB) http.HandlerFunc {

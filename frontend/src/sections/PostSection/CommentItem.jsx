@@ -9,7 +9,7 @@ export default function CommentItem({ comment, timeAgo, user, onDelete }) {
 
   return (
     <PostCard>
-      <PostCardContent className="py-2" padding="px-0">
+      <PostCardContent padding="px-0">
         
         <div className="flex items-center justify-between mb-1 pr-1">
 

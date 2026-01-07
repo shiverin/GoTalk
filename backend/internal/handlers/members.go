@@ -75,61 +75,84 @@ func JoinCommunity(db *sql.DB) http.HandlerFunc {
 
 // ---- LEAVE COMMUNITY ----
 func LeaveCommunity(db *sql.DB) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		//log.Println("LeaveCommunity handler triggered")
+    return func(w http.ResponseWriter, r *http.Request) {
+        communityIDStr := chi.URLParam(r, "id")
+        communityID, err := strconv.Atoi(communityIDStr)
+        if err != nil {
+            http.Error(w, "Invalid community ID", http.StatusBadRequest)
+            return
+        }
 
-		communityIDStr := chi.URLParam(r, "id")
-		communityID, err := strconv.Atoi(communityIDStr)
-		if err != nil {
-			//log.Println("Invalid community ID:", err)
-			http.Error(w, "Invalid community ID", http.StatusBadRequest)
-			return
-		}
+        userID := auth.GetUserID(r)
 
-		userID := auth.GetUserID(r)
-		//log.Printf("User %d leaving community %d\n", userID, communityID)
+        tx, err := db.Begin()
+        if err != nil {
+            http.Error(w, "Internal server error", http.StatusInternalServerError)
+            return
+        }
+        defer tx.Rollback()
 
-		tx, err := db.Begin()
-		if err != nil {
-			//log.Println("Failed to begin transaction:", err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
-			return
-		}
-		defer tx.Rollback()
+        // --- CHECK IF USER IS OWNER ---
+        var role string
+        err = tx.QueryRow(`
+            SELECT role FROM community_members
+            WHERE user_id = ? AND community_id = ?
+        `, userID, communityID).Scan(&role)
 
-		// Delete membership
-		_, err = tx.Exec(`
-			DELETE FROM community_members
-			WHERE user_id = ? AND community_id = ?;
-		`, userID, communityID)
-		if err != nil {
-			//log.Println("SQL Error deleting membership:", err)
-			http.Error(w, "Failed to leave community", http.StatusInternalServerError)
-			return
-		}
+        if err == sql.ErrNoRows {
+            w.WriteHeader(http.StatusForbidden)
+            json.NewEncoder(w).Encode(map[string]string{
+                "error": "You are not a member of this community",
+            })
+            return
+        }
 
-		// Update member count
-		_, err = tx.Exec(`
-			UPDATE communities
-			SET members = members - 1
-			WHERE id = ? AND members > 0;
-		`, communityID)
-		if err != nil {
-			//log.Println("SQL Error updating member count:", err)
-			http.Error(w, "Failed to update member count", http.StatusInternalServerError)
-			return
-		}
+        if err != nil {
+            w.WriteHeader(http.StatusInternalServerError)
+            json.NewEncoder(w).Encode(map[string]string{
+                "error": "Failed to check member role",
+            })
+            return
+        }
 
-		if err := tx.Commit(); err != nil {
-			//log.Println("Transaction commit failed:", err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
-			return
-		}
+        if role == "owner" {
+            w.WriteHeader(http.StatusForbidden)
+            json.NewEncoder(w).Encode(map[string]string{
+                "error": "Community owners cannot leave their own community",
+            })
+            return
+        }
 
-		//log.Println("Leave successful")
-		json.NewEncoder(w).Encode(map[string]string{"status": "left"})
-	}
+        // --- DELETE MEMBERSHIP ---
+        _, err = tx.Exec(`
+            DELETE FROM community_members
+            WHERE user_id = ? AND community_id = ?
+        `, userID, communityID)
+        if err != nil {
+            http.Error(w, "Failed to leave community", http.StatusInternalServerError)
+            return
+        }
+
+        // --- UPDATE MEMBER COUNT ---
+        _, err = tx.Exec(`
+            UPDATE communities
+            SET members = members - 1
+            WHERE id = ? AND members > 0
+        `, communityID)
+        if err != nil {
+            http.Error(w, "Failed to update member count", http.StatusInternalServerError)
+            return
+        }
+
+        if err := tx.Commit(); err != nil {
+            http.Error(w, "Internal server error", http.StatusInternalServerError)
+            return
+        }
+
+        json.NewEncoder(w).Encode(map[string]string{"status": "left"})
+    }
 }
+
 
 // ---- CHECK MEMBERSHIP ----
 func CheckMembership(db *sql.DB) http.HandlerFunc {

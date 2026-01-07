@@ -119,6 +119,8 @@ func main() {
 		// Users
 		r.Route("/users", func(r chi.Router) {
 			r.Get("/{userID}", handlers.GetUserByID(db))
+			r.Get("/{userID}/posts", handlers.GetPostsByUser(db))
+			r.Get("/{userID}/comments", handlers.GetCommentsByUser(db))
 
 		})
 	})

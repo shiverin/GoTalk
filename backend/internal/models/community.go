@@ -12,4 +12,5 @@ type Community struct {
 	PostsCount  int       `json:"postsCount"`          // optional: number of posts
 	IsPrivate   bool      `json:"isPrivate"`           // optional: if community is private
 	Rules       string    `json:"rules,omitempty"` // optional rules of the community
+	OwnerID     int       `json:"owner_id"`
 }

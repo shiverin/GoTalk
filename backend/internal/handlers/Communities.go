@@ -137,17 +137,25 @@ func GetAllCommunities(db *sql.DB) http.HandlerFunc {
 	}
 }
 
-// ---- GET COMMUNITY BY ID ----
 func GetCommunityByID(db *sql.DB, id int) (models.Community, error) {
 	var c models.Community
 	var createdStr string
 	var icon, description, rules sql.NullString
 
 	query := `
-		SELECT id, name, icon, description, rules, created_at, members, posts_count, is_private
-		FROM communities
-		WHERE id = ?
-	`
+        SELECT 
+            id,
+            name,
+            icon,
+            description,
+            rules,
+            created_at,
+            members,
+            posts_count,
+            is_private
+        FROM communities
+        WHERE id = ?
+    `
 
 	err := db.QueryRow(query, id).Scan(
 		&c.ID,
@@ -164,11 +172,18 @@ func GetCommunityByID(db *sql.DB, id int) (models.Community, error) {
 		return c, err
 	}
 
+	// Convert nullable fields
 	c.Icon = icon.String
 	c.Description = description.String
 	c.Rules = rules.String
-
 	c.CreatedAt, _ = time.Parse("2006-01-02 15:04:05", createdStr)
+
+	// ⭐ NEW: fetch owner ID using helper
+	ownerID, err := GetOwnerByCommunityID(db, c.ID)
+	if err != nil {
+		return c, err
+	}
+	c.OwnerID = ownerID
 
 	return c, nil
 }
@@ -300,4 +315,25 @@ func GetPostsByCommunity(db *sql.DB) http.HandlerFunc {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(posts)
 	}
+}
+
+func GetOwnerByCommunityID(db *sql.DB, communityID int) (int, error) {
+	var ownerID int
+
+	err := db.QueryRow(`
+        SELECT user_id
+        FROM community_members
+        WHERE community_id = ? AND role = 'owner'
+        LIMIT 1;
+    `, communityID).Scan(&ownerID)
+
+	if err == sql.ErrNoRows {
+		return 0, nil // No owner found
+	}
+
+	if err != nil {
+		return 0, err
+	}
+
+	return ownerID, nil
 }
