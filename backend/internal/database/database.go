@@ -17,5 +17,3 @@ func Open() *sql.DB {
 	}
 	return DB
 }
-
-///Users/shizhen/Documents/vscode/cvwoAssignment/GoTalk/backend/internal/database/database.go

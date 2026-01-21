@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 export default function PillButton({
+  width,              
   height = 40,
   children,
   onClick,
@@ -8,14 +9,14 @@ export default function PillButton({
   txtcolor = "black",
   textSize = 14,
   px = 14,
-  isOpen = false, // <-- NEW
+  isOpen = false, 
   className = "",
 }) {
   const [hovered, setHovered] = useState(false);
   const [active, setActive] = useState(false);
 
   const getFilter = () => {
-    if (isOpen) return "brightness(90%)"; // OPEN STATE LOOK
+    if (isOpen) return "brightness(90%)"; 
     if (active) return "brightness(80%)";
     if (hovered) return "brightness(90%)";
     return "brightness(100%)";
@@ -39,8 +40,9 @@ export default function PillButton({
         fontSize: `${textSize}px`,
         paddingLeft: `${px}px`,
         paddingRight: `${px}px`,
+        width: width ? `${width}px` : "auto",  // <-- conditional width
       }}
-      className={`rounded-full font-medium focus:outline-none inline-flex items-center ${className}`}
+      className={`rounded-full font-medium focus:outline-none inline-flex items-center justify-center ${className}`}
     >
       {children}
     </button>

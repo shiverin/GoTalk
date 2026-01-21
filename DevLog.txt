@@ -111,12 +111,12 @@
 - Started integration of user profile view
 - Fixed some bugs with editing post
 
+## 07-01-2026
+- Built UserProfilePage
+- Allow deleting communities for Owner
+- Prevent Owner from leaving community
+- Added Voting logic and backeng API for get/add/delete votes.
+- Polished Explore Communities Page
 
-
-
-Things left to do:
-delete community
-voting crud
-User Profile Retrieve and (edit??)
-Smoothen UI/ reorganize messy components
-polish overall UI
+## 21-01-2026
+-Improved README.md

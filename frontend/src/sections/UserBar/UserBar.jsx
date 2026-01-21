@@ -25,7 +25,7 @@ export default function UserBar({ user, posts, comments }) {
       className={`sticky top-[8vh] w-[25vw] rounded-md flex flex-col overflow-y-auto transition-all duration-300 min-h-[654px] pr-16 pt-4`}
     >
       <div className="pt-2 px-4 bg-gray-50 rounded-md pb-5 min-h-[300px]">
-        <div className="px-2 h-[200px]">
+        <div className="px-2 h-[192px]">
           <h2 className="font-semibold text-lg">{username}</h2>
           <p className="text-sm text-gray-600 mt-2">Account created:</p>
           <p className="text-gray-800 text-md font-medium">{accountAgeText}</p>

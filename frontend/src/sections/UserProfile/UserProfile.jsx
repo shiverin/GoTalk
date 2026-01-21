@@ -123,12 +123,3 @@ export default function UserProfile({ user, posts, comments }) {
 
   );
 }
-
-            // <Posts posts={posts}/>
-            // <div>hihi</div>
-            // <CommentList
-            // comments={localComments}
-            // timeAgo={timeAgo}
-            // user={user}
-            // onDelete={handleDeleteComment}
-            // />

@@ -69,6 +69,7 @@ func CreateTables(db *sql.DB) {
 		PRIMARY KEY (user_id, post_id),
 		FOREIGN KEY (user_id) REFERENCES users(id),
 		FOREIGN KEY (post_id) REFERENCES posts(id)
+    	UNIQUE(user_id, post_id)
 	);`
 
 	// ---------------- COMMUNITY MEMBERS ----------------

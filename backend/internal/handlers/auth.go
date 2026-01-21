@@ -70,7 +70,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var (
-		userID       int
+		userID   int
 		password string
 	)
 
@@ -106,12 +106,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 		Path:     "/",
 		MaxAge:   86400 * 7, // 7 days
-		Secure:   false,      // SET TRUE in production (https)
+		Secure:   false,     // SET TRUE in production (https)
 		SameSite: http.SameSiteLaxMode,
 	})
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"user": map[string]interface{}{
-			"id":   userID,
+			"id":       userID,
 			"username": req.Username,
 		},
 	})
@@ -119,41 +119,39 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func Me(w http.ResponseWriter, r *http.Request) {
-    userID := middleware.GetUserID(r)
-    if userID == 0 {
-        http.Error(w, "Unauthorized", http.StatusUnauthorized)
-        return
-    }
+	userID := middleware.GetUserID(r)
+	if userID == 0 {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
-    // Variables to scan DB values into
-    var (
-        username  string
-        createdAt string // or time.Time
-    )
+	// Variables to scan DB values into
+	var (
+		username  string
+		createdAt string // or time.Time
+	)
 
-    // Fetch BOTH username and created_at
-    err := database.DB.QueryRow(`
+	// Fetch BOTH username and created_at
+	err := database.DB.QueryRow(`
         SELECT username, created_at 
         FROM users 
         WHERE id = ?
     `, userID).Scan(&username, &createdAt)
 
-    if err != nil {
-        http.Error(w, "Failed to fetch user", http.StatusInternalServerError)
-        return
-    }
+	if err != nil {
+		http.Error(w, "Failed to fetch user", http.StatusInternalServerError)
+		return
+	}
 
-    // Return JSON response
-    json.NewEncoder(w).Encode(map[string]interface{}{
-        "user": map[string]interface{}{
-            "id":        userID,
-            "username":  username,
-            "createdAt": createdAt,
-        },
-    })
+	// Return JSON response
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"user": map[string]interface{}{
+			"id":        userID,
+			"username":  username,
+			"createdAt": createdAt,
+		},
+	})
 }
-
-
 
 func RefreshToken(w http.ResponseWriter, r *http.Request) {
 	var body map[string]string
@@ -199,17 +197,17 @@ func RefreshToken(w http.ResponseWriter, r *http.Request) {
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) {
-    http.SetCookie(w, &http.Cookie{
-        Name:     "access_token",
-        Value:    "",
-        Path:     "/",
-        MaxAge:   -1, // delete cookie
-        HttpOnly: true,
-        Secure:   false,
-        SameSite: http.SameSiteLaxMode,
-    })
+	http.SetCookie(w, &http.Cookie{
+		Name:     "access_token",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1, // delete cookie
+		HttpOnly: true,
+		Secure:   false,
+		SameSite: http.SameSiteLaxMode,
+	})
 
-    json.NewEncoder(w).Encode(map[string]string{
-        "message": "Logged out",
-    })
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "Logged out",
+	})
 }

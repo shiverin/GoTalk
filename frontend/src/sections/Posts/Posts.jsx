@@ -45,6 +45,9 @@ export default function Posts({ posts }) {
                 comments={comments.length}
                 link={`/posts/${post.id}`}
                 clink={`/communities/${post.communityId}`}
+                plink={post.link}
+                postId={post.id}
+                
               />
             </div>
           );

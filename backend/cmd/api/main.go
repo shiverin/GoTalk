@@ -15,9 +15,12 @@ import (
 	"github.com/shiverin/gotalk/backend/internal/database"
 	"github.com/shiverin/gotalk/backend/internal/handlers"
 	authMiddleware "github.com/shiverin/gotalk/backend/internal/middleware"
+
 )
 
 func main() {
+
+
 	// 1. Open DB
 	db := database.Open()
 	defer db.Close()
@@ -44,7 +47,7 @@ func main() {
 		// Auth routes
 		r.Post("/auth/register", handlers.Register)
 		r.Post("/auth/login", handlers.Login)
-    	r.Post("/auth/refresh", handlers.RefreshToken)
+		r.Post("/auth/refresh", handlers.RefreshToken)
 		r.Post("/auth/logout", handlers.Logout)
 
 		// Communities
@@ -110,11 +113,15 @@ func main() {
 				r.Delete("/", handlers.DeleteComment(db))
 			})
 			// Communities CRUD
-			r.Post("/communities", handlers.CreateCommunity(db))           // Create a new community
-			r.Put("/communities/{communityID}", handlers.UpdateCommunity(db)) // Update community
+			r.Post("/communities", handlers.CreateCommunity(db))                 // Create a new community
+			r.Put("/communities/{communityID}", handlers.UpdateCommunity(db))    // Update community
 			r.Delete("/communities/{communityID}", handlers.DeleteCommunity(db)) // Delete community
 
-			
+			// Votes
+			r.Post("/vote", handlers.CastVote(db))
+			r.Delete("/vote", handlers.RemoveVote(db))
+			r.Get("/vote/{userID}/{postID}", handlers.GetVote(db))
+
 		})
 		// Users
 		r.Route("/users", func(r chi.Router) {

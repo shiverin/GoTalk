@@ -2,6 +2,7 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import PostInteractionBar from "../../sections/PostSection/PostInteractionBar";
+import { useAuth } from "../../Context/AuthContext.jsx";
 
 export default function Post({
   title,
@@ -14,7 +15,12 @@ export default function Post({
   comments,
   link,
   clink,
+  plink,
+  postId
 }) {
+  const { user } = useAuth();
+  const userId=user?.id;
+
   return (
     <article className="w-full my-1 px-4 py-1 rounded-xl hover:bg-neutral-100 cursor-pointer">
       {/* Subreddit info */}
@@ -38,8 +44,19 @@ export default function Post({
       </Link>
       {/* Post content */}
       <p className="text-base leading-relaxed mb-6">{content}</p>
-      <PostInteractionBar score={score} commentCount={comments} />
-
+      {plink && plink.trim() !== "" && (
+        <div className="mb-4">
+          <a
+            href={plink.startsWith("http") ? plink : `https://${plink}`}
+            className="text-base cursor-pointer underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {plink}
+          </a>
+        </div>
+      )}
+      <PostInteractionBar initialScore={score} commentCount={comments} postId={postId} userId={userId} />
       {/* Author / Score / Comments
       <div className="flex items-center text-sm text-gray-500">
         <span>Posted by {author}</span>

@@ -39,6 +39,5 @@ export default function Card({ image, title, description, subforum, url }) {
     );  
   }  
   
-  // Otherwise, just return the card div  
   return cardContent;  
 }

@@ -210,8 +210,23 @@ export default function PostSection() {
             <h1 className="text-2xl font-bold mb-2">{post.title}</h1>
             <p className="text-base leading-relaxed mb-6">{post.content}</p>
 
+            {post.link && post.link.trim() !== "" && (
+              <div className="mb-4">
+                <a
+                  href={post.link.startsWith("http") ? post.link : `https://${post.link}`}
+                  className="text-base cursor-pointer underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {post.link}
+                </a>
+              </div>
+            )}
+
             <PostInteractionBar
-              score={post.score ?? 0}
+              postId={post.id}             
+              userId={user?.id}            
+              initialScore={post.score ?? 0} 
               commentCount={comments.length}
             />
           </PostCardContent>
