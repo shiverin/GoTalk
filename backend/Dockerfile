@@ -1,37 +1,36 @@
 # Build stage
 FROM golang:1.25.5-alpine AS builder
 
-# Install gcc for CGO (required for SQLite)
 RUN apk add --no-cache gcc musl-dev
 
 WORKDIR /app
 
-# Copy go mod files
+# Copy go mod files and download deps
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy source code
+# Copy source code including the DB
 COPY . .
 
-# Build the application with CGO enabled for SQLite
+# Build Go binary
 RUN CGO_ENABLED=1 GOOS=linux go build -o main ./cmd/api
 
 # Runtime stage
 FROM alpine:latest
 
-# Install SQLite runtime dependencies
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat sqlite
 
 WORKDIR /app
 
-# Copy the binary from builder
-COPY --from=builder /app/main .
-
-# Create directory for database
+# Create data folder
 RUN mkdir -p /app/data
 
-# Expose port
+# Copy Go binary
+COPY --from=builder /app/main .
+
+# Copy initial database (only for the first run)
+COPY --from=builder /app/cmd/api/forum.db ./data/forum.db
+
 EXPOSE 8080
 
-# Run the application
 CMD ["./main"]

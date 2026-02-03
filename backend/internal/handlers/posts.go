@@ -13,6 +13,23 @@ import (
 	"github.com/shiverin/gotalk/backend/internal/models"
 )
 
+// parseTime tries multiple timestamp formats commonly used in SQLite
+func parseTime(s string) (time.Time, error) {
+	formats := []string{
+		"2006-01-02 15:04:05",
+		time.RFC3339,
+		time.RFC3339Nano,
+		"2006-01-02T15:04:05Z",
+		"2006-01-02T15:04:05",
+	}
+	for _, f := range formats {
+		if t, err := time.Parse(f, s); err == nil {
+			return t, nil
+		}
+	}
+	return time.Time{}, nil // Return zero time if all fail
+}
+
 func CreatePost(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userID := auth.GetUserID(r)
@@ -136,15 +153,9 @@ func GetPosts(db *sql.DB) http.HandlerFunc {
 			p.AuthorID = authorID
 			p.CommunityID = communityID
 
-			// Parse timestamps
-			var err1, err2 error
-			p.CreatedAt, err1 = time.Parse(time.RFC3339, createdStr)
-			p.UpdatedAt, err2 = time.Parse(time.RFC3339, updatedStr)
-			if err1 != nil || err2 != nil {
-				log.Println("GetPosts time.Parse error:", err1, err2)
-				http.Error(w, "Invalid post timestamp format", http.StatusInternalServerError)
-				return
-			}
+			// Parse timestamps (supports multiple formats)
+			p.CreatedAt, _ = parseTime(createdStr)
+			p.UpdatedAt, _ = parseTime(updatedStr)
 
 			// Score
 			p.Score = 0
@@ -190,8 +201,8 @@ func GetPosts(db *sql.DB) http.HandlerFunc {
 					log.Println("GetPosts comment scan error:", err)
 					continue
 				}
-				c.CreatedAt, _ = time.Parse(time.RFC3339, created)
-				c.UpdatedAt, _ = time.Parse(time.RFC3339, updated)
+				c.CreatedAt, _ = parseTime(created)
+				c.UpdatedAt, _ = parseTime(updated)
 				postComments = append(postComments, c)
 			}
 
@@ -263,19 +274,9 @@ func GetPost(db *sql.DB) http.HandlerFunc {
 			p.Link = ""
 		}
 
-		// Parse timestamps
-		p.CreatedAt, err = time.Parse(time.RFC3339, createdAtStr)
-		if err != nil {
-			log.Println("GetPost time.Parse created_at error:", err)
-			http.Error(w, "Invalid post created_at format", http.StatusInternalServerError)
-			return
-		}
-		p.UpdatedAt, err = time.Parse(time.RFC3339, updatedAtStr)
-		if err != nil {
-			log.Println("GetPost time.Parse updated_at error:", err)
-			http.Error(w, "Invalid post updated_at format", http.StatusInternalServerError)
-			return
-		}
+		// Parse timestamps (supports multiple formats)
+		p.CreatedAt, _ = parseTime(createdAtStr)
+		p.UpdatedAt, _ = parseTime(updatedAtStr)
 
 		// Fetch full author object
 		type AuthorResponse struct {
@@ -326,8 +327,8 @@ func GetPost(db *sql.DB) http.HandlerFunc {
 				log.Println("GetPost comment scan error:", err)
 				continue
 			}
-			c.CreatedAt, _ = time.Parse(time.RFC3339, createdStr)
-			c.UpdatedAt, _ = time.Parse(time.RFC3339, updatedStr)
+			c.CreatedAt, _ = parseTime(createdStr)
+			c.UpdatedAt, _ = parseTime(updatedStr)
 			comments = append(comments, c)
 		}
 

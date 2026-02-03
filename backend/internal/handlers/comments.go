@@ -200,8 +200,8 @@ func GetComments(db *sql.DB) http.HandlerFunc {
 			if err := rows.Scan(&c.ID, &c.Content, &c.AuthorID, &c.PostID, &createdStr, &updatedStr); err != nil {
 				continue
 			}
-			c.CreatedAt, _ = time.Parse(time.RFC3339, createdStr)
-			c.UpdatedAt, _ = time.Parse(time.RFC3339, updatedStr)
+			c.CreatedAt, _ = parseTime(createdStr)
+			c.UpdatedAt, _ = parseTime(updatedStr)
 			comments = append(comments, c)
 		}
 

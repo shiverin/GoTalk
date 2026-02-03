@@ -55,7 +55,7 @@ func GetTopCommunities(db *sql.DB, limit int) http.HandlerFunc {
 			c.Description = description.String
 			c.Rules = rules.String
 
-			c.CreatedAt, err = time.Parse("2006-01-02 15:04:05", createdStr)
+			c.CreatedAt, err = parseTime(createdStr)
 			if err != nil {
 				log.Println("Time parse error for created_at:", createdStr, "error:", err)
 				c.CreatedAt = time.Now()
@@ -118,7 +118,7 @@ func GetAllCommunities(db *sql.DB) http.HandlerFunc {
 			c.Description = description.String
 			c.Rules = rules.String
 
-			c.CreatedAt, err = time.Parse("2006-01-02 15:04:05", createdStr)
+			c.CreatedAt, err = parseTime(createdStr)
 			if err != nil {
 				log.Println("Time parse error for created_at:", createdStr, "error:", err)
 				c.CreatedAt = time.Now()
@@ -177,7 +177,7 @@ func GetCommunityByID(db *sql.DB, id int) (models.Community, error) {
 	c.Icon = icon.String
 	c.Description = description.String
 	c.Rules = rules.String
-	c.CreatedAt, _ = time.Parse("2006-01-02 15:04:05", createdStr)
+	c.CreatedAt, _ = parseTime(createdStr)
 
 	// ⭐ NEW: fetch owner ID using helper
 	ownerID, err := GetOwnerByCommunityID(db, c.ID)
@@ -253,8 +253,8 @@ func GetPostsByCommunity(db *sql.DB) http.HandlerFunc {
 				p.Link = link.String
 			}
 
-			p.CreatedAt, _ = time.Parse(time.RFC3339, createdStr)
-			p.UpdatedAt, _ = time.Parse(time.RFC3339, updatedStr)
+			p.CreatedAt, _ = parseTime(createdStr)
+			p.UpdatedAt, _ = parseTime(updatedStr)
 			if score.Valid {
 				p.Score = int(score.Int64)
 			}
@@ -293,8 +293,8 @@ func GetPostsByCommunity(db *sql.DB) http.HandlerFunc {
 				if err := commentRows.Scan(&c.ID, &c.Content, &c.AuthorID, &c.PostID, &created, &updated); err != nil {
 					continue
 				}
-				c.CreatedAt, _ = time.Parse(time.RFC3339, created)
-				c.UpdatedAt, _ = time.Parse(time.RFC3339, updated)
+				c.CreatedAt, _ = parseTime(created)
+				c.UpdatedAt, _ = parseTime(updated)
 				postComments = append(postComments, c)
 			}
 			commentRows.Close()
