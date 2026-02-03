@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ArrowUp, ArrowDown, MessageSquare, Share2 } from "lucide-react";
 import PillButton from "../../components/PillButton/PillButton.jsx";
+import { API_BASE_URL } from "../../utils/api";
 
 export default function PostInteractionBar({ postId, initialScore, commentCount, userId }) {
   const [score, setScore] = useState(initialScore);
@@ -9,7 +10,7 @@ export default function PostInteractionBar({ postId, initialScore, commentCount,
   // Fetch current user's vote for this post
   useEffect(() => {
     if (!userId) return;
-    fetch(`http://localhost:8080/api/vote/${userId}/${postId}`, { credentials: "include" })
+    fetch(`${API_BASE_URL}/api/vote/${userId}/${postId}`, { credentials: "include" })
       .then(res => res.json())
       .then(data => setVote(data.value))
       .catch(err => console.error(err));
@@ -27,14 +28,14 @@ export default function PostInteractionBar({ postId, initialScore, commentCount,
         let res;
 
         if (newValue === 0) {
-          res = await fetch("http://localhost:8080/api/vote", {
+          res = await fetch(`${API_BASE_URL}/api/vote`, {
             method: "DELETE",
             credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userId, postId }),
           });
         } else {
-          res = await fetch("http://localhost:8080/api/vote", {
+          res = await fetch(`${API_BASE_URL}/api/vote`, {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },

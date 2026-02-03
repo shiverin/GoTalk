@@ -5,7 +5,7 @@ import PillButton from "../../components/PillButton/PillButton.jsx";
 import { FiTable } from "react-icons/fi";
 import Posts from "../Posts/Posts.jsx";
 import PostBar from "../PostBar/PostBar.jsx";
-import { useAuth } from "../../Context/AuthContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 import CircleButton from "../../components/CircleButton/CircleButton.jsx";
 import Dropdown from "../../components/DropdownMenu/DropdownMenu.jsx";
 import { DropdownItem } from "../../components/DropdownMenu/DropdownItem.jsx";

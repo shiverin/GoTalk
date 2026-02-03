@@ -1,0 +1,33 @@
+# Git
+.git
+.gitignore
+
+# Node
+frontend/node_modules
+frontend/.env.local
+frontend/.env.*.local
+
+# Build outputs
+frontend/dist
+backend/main
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Database (we want fresh for Docker)
+*.db
+
+# Documentation
+*.md
+!README.md

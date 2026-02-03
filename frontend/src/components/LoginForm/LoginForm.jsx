@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "../../Context/AuthContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 export default function LoginForm({ onClose, switchMode }) {
   const [username, setUsername] = useState("");

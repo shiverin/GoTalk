@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
+import { API_BASE_URL } from "../../utils/api";
 
 export default function CreateCommunityModal({ onClose }) {
   const [name, setName] = useState("");
@@ -13,7 +14,7 @@ export default function CreateCommunityModal({ onClose }) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8080/api/communities", {
+      const res = await fetch(`${API_BASE_URL}/api/communities`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

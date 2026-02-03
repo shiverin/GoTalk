@@ -91,7 +91,8 @@ func GetAllCommunities(db *sql.DB) http.HandlerFunc {
 		}
 		defer rows.Close()
 
-		var communities []models.Community
+		// Initialize as empty slice to ensure JSON returns [] instead of null
+		communities := make([]models.Community, 0)
 		for rows.Next() {
 			var c models.Community
 			var createdStr string
@@ -220,13 +221,14 @@ func GetPostsByCommunity(db *sql.DB) http.HandlerFunc {
 		}
 		defer rows.Close()
 
-		var posts []struct {
+		// Initialize as empty slice to ensure JSON returns [] instead of null
+		posts := make([]struct {
 			Post      models.Post      `json:"post"`
 			Author    string           `json:"author"`
 			Community models.Community `json:"community"`
 			Comments  []models.Comment `json:"comments"`
 			Score     int              `json:"score"`
-		}
+		}, 0)
 
 		for rows.Next() {
 			var p models.Post

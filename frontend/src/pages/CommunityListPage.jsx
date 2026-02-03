@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "./Layout.jsx";
 import CommunityList from "../sections/Community/CommunityList";
+import { API_BASE_URL } from "../utils/api";
 
 export default function CommunityListPage({ onLoginClick }) {
   const [communities, setCommunities] = useState([]);
@@ -10,12 +11,12 @@ export default function CommunityListPage({ onLoginClick }) {
   useEffect(() => {
     async function fetchCommunities() {
       try {
-        const res = await fetch("http://localhost:8080/api/communities");
+        const res = await fetch(`${API_BASE_URL}/api/communities`);
         if (!res.ok) {
           throw new Error("Failed to fetch communities");
         }
         const data = await res.json();
-        setCommunities(data); // assuming backend returns array
+        setCommunities(data || []); // Handle null response
       } catch (err) {
         console.error("Error fetching communities:", err);
       } finally {

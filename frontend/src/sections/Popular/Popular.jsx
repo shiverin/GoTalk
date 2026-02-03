@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";  
 import Community from "../../components/Community/Community.jsx";
 import PillButton from "../../components/PillButton/PillButton.jsx";
+import { API_BASE_URL } from "../../utils/api";
 
 const randomMembers = () => Math.floor(Math.random() * 5_000_000) + 1_000;
 const randomIconUrl = (seed) => `https://api.dicebear.com/7.x/shapes/svg?seed=${seed}`;
@@ -40,13 +41,14 @@ export default function Popular() {
   const navigate = useNavigate();  // <--- Add this
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/communities/top/20")
+    fetch(`${API_BASE_URL}/api/communities/top/20`)
       .then((res) => {
         if (!res.ok) throw new Error("Network response was not ok");
         return res.json();
       })
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        const communityData = data || [];
+        if (Array.isArray(communityData) && communityData.length > 0) {
           // Map API data to include ID
           const mapped = data.slice(0, 20).map((c, i) => ({
             id: c.id ?? i, // fallback if no id

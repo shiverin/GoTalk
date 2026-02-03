@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../../Context/AuthContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { API_BASE_URL } from "../../utils/api";
 
 export default function JoinButton({ communityId }) {
   const { user } = useAuth();
@@ -14,7 +15,7 @@ export default function JoinButton({ communityId }) {
       return;
     }
 
-    fetch(`http://localhost:8080/api/communities/${communityId}/joined`, {
+    fetch(`${API_BASE_URL}/api/communities/${communityId}/joined`, {
       credentials: "include",          // <-- IMPORTANT
     })
       .then((res) => {
@@ -37,8 +38,8 @@ export default function JoinButton({ communityId }) {
     }
 
     const url = joined
-      ? `http://localhost:8080/api/communities/${communityId}/leave`
-      : `http://localhost:8080/api/communities/${communityId}/join`;
+      ? `${API_BASE_URL}/api/communities/${communityId}/leave`
+      : `${API_BASE_URL}/api/communities/${communityId}/join`;
 
     try {
       const res = await fetch(url, {

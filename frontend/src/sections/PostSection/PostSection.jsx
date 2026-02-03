@@ -7,8 +7,9 @@ import PostHeader from "./PostHeader.jsx";
 import PostInteractionBar from "./PostInteractionBar.jsx";
 import PostSortDropdown from "./PostSortDropdown.jsx";
 import CommentList from "./CommentList.jsx";
-import { useAuth } from "../../Context/AuthContext.jsx";           
+import { useAuth } from "../../context/AuthContext.jsx";           
 import CommentBar from "../../components/CommentBar/CommentBar.jsx";
+import { API_BASE_URL } from "../../utils/api";
 
 import PostBar from "../PostBar/PostBar.jsx"; // <-- import sidebar
 
@@ -53,7 +54,7 @@ export default function PostSection() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:8080/api/posts/${id}/comments`, {
+      const res = await fetch(`${API_BASE_URL}/api/posts/${id}/comments`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -89,7 +90,7 @@ export default function PostSection() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/comments/${commentId}`, {
         method: "DELETE",
         credentials: "include",
         headers: { Authorization: `Bearer ${token}` },
@@ -111,7 +112,7 @@ export default function PostSection() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:8080/api/posts/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/posts/${id}`, {
         method: "DELETE",
         credentials: "include",
         headers: { Authorization: `Bearer ${token}` },
@@ -141,7 +142,7 @@ export default function PostSection() {
         return;
       }
       try {
-        const res = await fetch(`http://localhost:8080/api/posts/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/posts/${id}`);
         if (!res.ok) {
           const text = await res.text();
           throw new Error(`API error ${res.status}: ${text}`);

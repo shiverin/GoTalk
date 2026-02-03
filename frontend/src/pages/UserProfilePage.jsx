@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Layout from "./Layout.jsx";
 import UserProfile from "../sections/UserProfile/UserProfile.jsx";
 import UserBar from "../sections/UserBar/UserBar.jsx";
+import { API_BASE_URL } from "../utils/api";
 
 export default function UserProfilePage({ onLoginClick }) {
   const { id } = useParams();
@@ -20,7 +21,7 @@ export default function UserProfilePage({ onLoginClick }) {
         setLoading(true);
 
         // Fetch user
-        const userRes = await fetch(`http://localhost:8080/api/users/${id}`, {
+        const userRes = await fetch(`${API_BASE_URL}/api/users/${id}`, {
           credentials: "include",
         });
         if (!userRes.ok) throw new Error("Failed to fetch user");
@@ -29,7 +30,7 @@ export default function UserProfilePage({ onLoginClick }) {
 
         // Fetch user's posts
         const postsRes = await fetch(
-          `http://localhost:8080/api/users/${id}/posts`,
+          `${API_BASE_URL}/api/users/${id}/posts`,
           { credentials: "include" }
         );
         const postsData = postsRes.ok ? await postsRes.json() : [];
@@ -37,7 +38,7 @@ export default function UserProfilePage({ onLoginClick }) {
 
         // Fetch user's comments
         const commentsRes = await fetch(
-          `http://localhost:8080/api/users/${id}/comments`,
+          `${API_BASE_URL}/api/users/${id}/comments`,
           { credentials: "include" }
         );
         const commentsData = commentsRes.ok ? await commentsRes.json() : [];

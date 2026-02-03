@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PillButton from "../../components/PillButton/PillButton.jsx";
 import UserProfileFeed from "./UserProfileFeed.jsx";
+import { API_BASE_URL } from "../../utils/api";
 
 const randomIconUrl = (seed) =>
   `https://api.dicebear.com/7.x/shapes/svg?seed=${seed}`;
@@ -32,7 +33,7 @@ export default function UserProfile({ user, posts, comments }) {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/comments/${commentId}`, {
         method: "DELETE",
         credentials: "include",
         headers: { Authorization: `Bearer ${token}` },

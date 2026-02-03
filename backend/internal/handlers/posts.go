@@ -97,6 +97,15 @@ func GetPosts(db *sql.DB) http.HandlerFunc {
 			CommentsCount int              `json:"commentsCount"`
 		}
 
+		// Initialize as empty slice to ensure JSON returns [] instead of null
+		posts = make([]struct {
+			Post          models.Post      `json:"post"`
+			Author        string           `json:"author"`
+			Community     models.Community `json:"community"`
+			Comments      []models.Comment `json:"comments"`
+			Score         int              `json:"score"`
+			CommentsCount int              `json:"commentsCount"`
+		}, 0)
 
 		for rows.Next() {
 			var p models.Post
@@ -187,19 +196,19 @@ func GetPosts(db *sql.DB) http.HandlerFunc {
 			}
 
 			posts = append(posts, struct {
-				Post      models.Post      `json:"post"`
-				Author    string           `json:"author"`
-				Community models.Community `json:"community"`
-				Comments  []models.Comment `json:"comments"`
-				Score     int              `json:"score"`
-    			CommentsCount int              `json:"commentsCount"`
+				Post          models.Post      `json:"post"`
+				Author        string           `json:"author"`
+				Community     models.Community `json:"community"`
+				Comments      []models.Comment `json:"comments"`
+				Score         int              `json:"score"`
+				CommentsCount int              `json:"commentsCount"`
 			}{
-				Post:      p,
-				Author:    author,
-				Community: community,
-				Comments:  postComments,
-				Score:     p.Score,
-				CommentsCount: int(commentsCount.Int64),  // 👈 add this
+				Post:          p,
+				Author:        author,
+				Community:     community,
+				Comments:      postComments,
+				Score:         p.Score,
+				CommentsCount: int(commentsCount.Int64), // 👈 add this
 			})
 		}
 
@@ -339,7 +348,6 @@ func GetPost(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(response)
 	}
 }
-
 
 // ---- UPDATE POST ----
 func UpdatePost(db *sql.DB) http.HandlerFunc {

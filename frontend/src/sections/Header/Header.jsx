@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar.jsx";
 import PillButton from "../../components/PillButton/PillButton.jsx";
 import CircleButton from "../../components/CircleButton/CircleButton.jsx";
-import { useAuth } from "../../Context/AuthContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown.jsx";
 import NoProfileDropdown from "../ProfileDropdown/NoProfileDropdown.jsx";
 

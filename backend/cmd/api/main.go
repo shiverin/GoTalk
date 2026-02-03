@@ -15,11 +15,9 @@ import (
 	"github.com/shiverin/gotalk/backend/internal/database"
 	"github.com/shiverin/gotalk/backend/internal/handlers"
 	authMiddleware "github.com/shiverin/gotalk/backend/internal/middleware"
-
 )
 
 func main() {
-
 
 	// 1. Open DB
 	db := database.Open()
@@ -35,7 +33,7 @@ func main() {
 
 	// 4. CORS
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowedOrigins:   []string{"http://localhost:5173", "http://localhost:3000"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
 		AllowCredentials: true,

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_BASE_URL } from "../../utils/api";
 
 export default function SignupForm({ onClose, switchMode }) {
   const [username, setUsername] = useState("");
@@ -21,7 +22,7 @@ export default function SignupForm({ onClose, switchMode }) {
     setLoading(true);
 
     try {
-        const res = await fetch("http://localhost:8080/api/auth/register", {
+        const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: username, password }), // match backend keys

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Dropdown from "../../components/DropdownMenu/DropdownMenu.jsx";
 import { DropdownItem } from "../../components/DropdownMenu/DropdownItem.jsx";
 import CircleButton from "../../components/CircleButton/CircleButton.jsx";
-import { useAuth } from "../../Context/AuthContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 export default function PostHeader({
   community,

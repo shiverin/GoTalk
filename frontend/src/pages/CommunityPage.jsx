@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "./Layout.jsx";
 import CommunitySection from "../sections/Community/CommunitySection";
+import { API_BASE_URL } from "../utils/api";
 
 export default function CommunityPage({ onLoginClick }) {
   const { id } = useParams(); // community ID from URL
@@ -15,7 +16,7 @@ export default function CommunityPage({ onLoginClick }) {
     if (!id) return;
 
     setLoadingCommunity(true);
-    fetch(`http://localhost:8080/api/communities/${id}`)
+    fetch(`${API_BASE_URL}/api/communities/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch community");
         return res.json();
@@ -30,12 +31,12 @@ export default function CommunityPage({ onLoginClick }) {
     if (!id) return;
 
     setLoadingPosts(true);
-    fetch(`http://localhost:8080/api/communities/${id}/posts`)
+    fetch(`${API_BASE_URL}/api/communities/${id}/posts`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch posts");
         return res.json();
       })
-      .then((data) => setPosts(data))
+      .then((data) => setPosts(data || [])) // Handle null response
       .catch((err) => console.error("Posts fetch error:", err))
       .finally(() => setLoadingPosts(false));
   }, [id]);

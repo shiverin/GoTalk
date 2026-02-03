@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./Layout.jsx";
 import Content from "../sections/Content/Content.jsx";
+import { API_BASE_URL } from "../utils/api";
 
 
 export default function PopularPostPage({ onLoginClick }) {
@@ -12,11 +13,11 @@ export default function PopularPostPage({ onLoginClick }) {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const res = await fetch("http://localhost:8080/api/posts");
+        const res = await fetch(`${API_BASE_URL}/api/posts`);
         if (!res.ok) throw new Error("Failed to fetch posts");
 
         const data = await res.json();
-        setPosts(data);
+        setPosts(data || []); // Handle null response
       } catch (err) {
         setError("Failed to load posts");
       } finally {

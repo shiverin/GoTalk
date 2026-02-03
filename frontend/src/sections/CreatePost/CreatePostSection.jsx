@@ -4,6 +4,7 @@ import CommunitySelector from "./CommunitySelector";
 import PostTypeTabs from "./PostTypeTabs";
 import PostEditor from "./PostEditor";
 import PostActions from "./PostActions";
+import { API_BASE_URL } from "../../utils/api";
 
 export default function CreatePostSection() {
   const { communityId, postId } = useParams(); // postId for editing
@@ -22,7 +23,7 @@ export default function CreatePostSection() {
   console.log("Selected community:", selectedCommunity);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/communities", {
+    fetch(`${API_BASE_URL}/api/communities`, {
       credentials: "include",
     })
       .then((res) => {
@@ -36,7 +37,7 @@ export default function CreatePostSection() {
   useEffect(() => {
     if (!postId) return;
 
-    fetch(`http://localhost:8080/api/posts/${postId}`, {
+    fetch(`${API_BASE_URL}/api/posts/${postId}`, {
       credentials: "include",
     })
       .then((res) => {
@@ -66,8 +67,8 @@ export default function CreatePostSection() {
     };
 
     const url = postId
-      ? `http://localhost:8080/api/posts/${postId}`
-      : "http://localhost:8080/api/posts";
+      ? `${API_BASE_URL}/api/posts/${postId}`
+      : `${API_BASE_URL}/api/posts`;
     const method = postId ? "PUT" : "POST";
 
     try {
@@ -93,7 +94,7 @@ export default function CreatePostSection() {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      const res = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/posts/${postId}`, {
         method: "DELETE",
         credentials: "include", 
       });

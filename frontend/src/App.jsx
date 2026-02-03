@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import PostPage from "./pages/PostPage";
 import LoginModal from "./components/LoginModal/LoginModal.jsx";
-import { AuthProvider } from "./Context/AuthContext.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 import UserProfilePage from "./pages/UserProfilePage.jsx";
 import CreatePostPage from "./pages/CreatePostPage.jsx";
 import CommunityListPage from "./pages/CommunityListPage.jsx";

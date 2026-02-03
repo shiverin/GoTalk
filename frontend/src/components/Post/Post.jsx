@@ -2,7 +2,7 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import PostInteractionBar from "../../sections/PostSection/PostInteractionBar";
-import { useAuth } from "../../Context/AuthContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 export default function Post({
   title,
