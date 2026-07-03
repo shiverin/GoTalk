@@ -7,6 +7,8 @@ import CircleButton from "../../components/CircleButton/CircleButton.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown.jsx";
 import NoProfileDropdown from "../ProfileDropdown/NoProfileDropdown.jsx";
+import { IS_DEMO_MODE } from "../../demo/demoMode.js";
+import { resetGoTalkDemoState } from "../../demo/demoApi.js";
 
 import {
   MdOutlineQrCodeScanner,
@@ -25,6 +27,11 @@ export default function Header({ onLoginClick, communityId }) {
   };
 
   const navigate = useNavigate();
+
+  const resetDemo = () => {
+    resetGoTalkDemoState();
+    window.location.href = "/";
+  };
 
   return (
     <nav
@@ -57,6 +64,19 @@ export default function Header({ onLoginClick, communityId }) {
             <span className="text-gray-700 font-medium pr-4">
               Welcome, {user.username}
             </span>
+
+            {IS_DEMO_MODE && (
+              <PillButton
+                px="10"
+                bgcolor="#EAEDEF"
+                txtcolor="#263238"
+                height={32}
+                textSize={12}
+                onClick={resetDemo}
+              >
+                Reset demo
+              </PillButton>
+            )}
 
             <CircleButton
               Icon={<MdCampaign className="text-xl" />}

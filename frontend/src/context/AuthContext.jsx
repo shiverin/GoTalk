@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { API_BASE_URL } from "../utils/api";
+import { IS_DEMO_MODE } from "../demo/demoMode";
 
 const AuthContext = createContext();
 
@@ -56,10 +57,16 @@ export function AuthProvider({ children }) {
 
   // logout API call
   const logout = async () => {
-    await fetch(`${API_BASE_URL}/api/auth/logout`, {
+    const res = await fetch(`${API_BASE_URL}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
+
+    if (IS_DEMO_MODE) {
+      const data = await res.json();
+      setUser(data.user);
+      return;
+    }
 
     setUser(null);
   };
