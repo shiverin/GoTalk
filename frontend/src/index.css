@@ -46,3 +46,88 @@ body {
   display: none;             /* Chrome, Safari */
 }
 
+@media (max-width: 768px) {
+  html,
+  body,
+  #root {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  nav {
+    height: 68px !important;
+    padding: 8px !important;
+    gap: 8px;
+  }
+
+  nav .flex-shrink-0 {
+    font-size: 20px !important;
+    padding-left: 4px !important;
+  }
+
+  nav [class*="w-[63vw]"] {
+    width: calc(100vw - 112px) !important;
+    justify-content: flex-start !important;
+  }
+
+  nav form {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  nav form button[type="submit"],
+  nav > .flex-1 {
+    display: none !important;
+  }
+
+  [class*="w-[18.5%]"] {
+    display: none !important;
+  }
+
+  [class*="ml-[18.5%]"],
+  [class*="ml-[10.3%]"] {
+    margin-left: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .pt-\[8vh\] {
+    padding-top: 68px !important;
+  }
+
+  .pl-16,
+  .pr-16,
+  .pl-20,
+  .pr-10,
+  .px-16,
+  .px-20 {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  [class*="w-[70%]"],
+  [class*="w-[57vw]"],
+  [class*="w-[70vw]"] {
+    width: 100% !important;
+    padding-right: 0 !important;
+  }
+
+  [class*="w-[29.5%]"],
+  [class*="w-[26vw]"],
+  [class*="w-[30vw]"],
+  [class*="w-[25vw]"] {
+    display: none !important;
+  }
+
+  .max-w-6xl {
+    max-width: 100% !important;
+  }
+
+  article {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  article p {
+    font-size: 14px;
+  }
+}
